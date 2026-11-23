@@ -453,6 +453,12 @@ function get_title($key, $default, $default_en = '') {
                     <h4><?= get_title('tree_title', 'زنجیرا بنەمالێ', 'Family Tree') ?></h4>
                 </a>
             </div>
+            <div class="glass-card">
+                <a href="natural_tree.php">
+                    <div class="icon-box"><i class="fas fa-tree" style="color:#7fd17f;filter:drop-shadow(0 0 8px rgba(127,209,127,0.45))" aria-hidden="true"><svg class="home-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M12 2c-2.6 0-4.6 1.9-4.9 4.3A4.5 4.5 0 0 0 4 10.6a4.5 4.5 0 0 0 3.2 4.3A4 4 0 0 0 11 18v4h2v-4a4 4 0 0 0 3.8-3.1A4.5 4.5 0 0 0 20 10.6a4.5 4.5 0 0 0-3.1-4.3C16.6 3.9 14.6 2 12 2Zm-1 10.6-2.2-1.7 1.2-1.6 1 .8V8h2v3.1l1-.8 1.2 1.6-2.2 1.7V16h-2Z"/></svg></i></div>
+                    <h4><?= get_title('natural_tree_title', 'دارا سروشتی یا بنەمالێ', 'Natural Family Tree') ?></h4>
+                </a>
+            </div>
           
             <div class="glass-card">
                 <a href="name_stats.php">
