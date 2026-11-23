@@ -1,0 +1,405 @@
+/* style.css */
+
+/* style.css */
+
+/* ... (باقي الكود) ... */
+
+/* تنسيقات إضافية للأزرار الجديدة */
+.selection-buttons {
+    margin-bottom: 2.5rem; /* زيادة الهامش السفلي قليلاً */
+}
+
+/* التنسيق الأساسي لكل الأزرار في هذا القسم */
+.selection-buttons .btn {
+    font-family: 'CustomFont', 'Tajawal', Arial, sans-serif;
+    font-weight: 500;
+    width: 80% ;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    border-radius: 12px;
+    margin-top: 10px;
+    transition: var(--transition);
+    border: none; /* إزالة حدود Bootstrap الافتراضية */
+    background: none; /* إزالة خلفية Bootstrap الافتراضية */
+}
+.me-3 {
+    margin-left: 0rem !important;
+}
+/* تنسيقات الأزرار لتتماشى مع تصميم الـ Glassmorphism */
+.selection-button-style {
+    /* خلفية زجاجية */
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-color);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* تأثير التوهج عند التحويم (Hover) */
+.selection-button-style:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px var(--shadow-dark), 0 0 15px var(--orb2-color);
+    color: var(--primary-color);
+}
+
+/* المؤثر البصري للزر النشط/المحدد */
+.selection-button-style.active {
+    background: var(--primary-color); /* خلفية صلبة عند التحديد */
+    color: var(--bg-color); /* لون النص يتغير للخلفية لتباين أفضل */
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6); /* توهج أقوى */
+    transform: scale(1.02); /* تكبير بسيط للتأكيد */
+}
+
+/* تنسيقات خاصة لأزرار Bootstrap المستخدمة لتحديد الألوان */
+#clan1Btn.active {
+    background: #536c92; /* Blue */
+    color: white;
+}
+#adminBtn.active {
+    background: #536c92; /* Red */
+    color: white;
+}
+
+/* ... (باقي الكود) ... */
+
+:root {
+    --bg-color: rgb(131 155 177);
+    --orb1-color: #979fb4; 
+    --orb2-color: #ffffff;
+    --card-bg: rgb(170 198 202 / 33%);
+    --card-border: rgb(255 255 255 / 38%);
+    --shadow-dark: rgba(0, 0, 0, 0.3);
+    --text-color: #f8f9fa;
+    --text-secondary: #ffffff;
+    --primary-color: #ffffff;
+    --hover-color: #6d28d9;
+    --accent-color: var(--orb1-color);
+    --transition: all 0.3s 
+cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+@media (orientation: landscape) and (max-height: 500px) {
+
+    /* تقليل حجم خط الشعار في الـ Navbar */
+    .navbar-brand {
+        font-size: 1.1rem; /* تصغير حجم الخط قليلاً */
+    }
+
+    /* تقليل حجم خط العنوان الرئيسي */
+    .main-header h1 {
+        font-size: 1.8rem; /* تصغير حجم الخط */
+        margin-bottom: 15px; /* تقليل الهامش السفلي */
+    }
+
+    /* تغيير تصميم شبكة لوحة التحكم */
+    .dashboard-grid {
+        /* استخدام 3 أعمدة في الوضع الأفقي */
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 15px; /* تقليل المسافة بين البطاقات */
+    }
+
+    /* تعديل على البطاقات نفسها */
+    .dashboard-card {
+        padding: 15px; /* تقليل الحشوة الداخلية */
+    }
+
+    /* تصغير حجم أيقونة البطاقة */
+    .dashboard-card .card-icon {
+        font-size: 2rem; /* تصغير حجم الأيقونة */
+        margin-bottom: 8px;
+    }
+
+    /* تصغير حجم عنوان البطاقة */
+    .dashboard-card .card-title {
+        font-size: 0.9rem; /* تصغير حجم الخط */
+    }
+
+    /* تقليل حجم خط الفوتر */
+    footer p {
+        font-size: 0.8rem;
+    }
+    
+    /* إخفاء الكرات المتحركة في الخلفية لتخفيف العبء البصري 
+       وتحسين الأداء على الشاشات الصغيرة الأفقية */
+    .background-orbs {
+        display: none;
+    }
+}
+
+/* يمكن إضافة نطاق آخر للشاشات الأكبر قليلاً إذا لزم الأمر */
+@media (orientation: landscape) and (min-height: 501px) and (max-height: 700px) {
+    .dashboard-grid {
+        /* استخدام 4 أعمدة للشاشات الأفقية الأكبر حجماً (مثل الأجهزة اللوحية الصغيرة) */
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+  @font-face {
+            font-family: 'CustomFont';
+            src: url('./Speda.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+    background-color: var(--bg-color);
+        font-family: 'CustomFont', 'Tajawal', Arial, sans-serif;
+    color: var(--text-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.background-orbs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: move 20s infinite alternate ease-in-out;
+}
+
+.orb1 {
+    width: 500px;
+    height: 500px;
+    background-color: var(--orb1-color);
+    top: -150px;
+    left: -150px;
+}
+
+.orb2 {
+    width: 400px;
+    height: 400px;
+    background-color: var(--orb2-color);
+    bottom: -200px;
+    right: -100px;
+    animation-duration: 25s;
+}
+
+@keyframes move {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(50px, -50px) rotate(45deg); }
+    100% { transform: translate(100px, -100px) rotate(90deg); }
+}
+
+/* --- Navigation Bar --- */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 10px 0;
+    background: rgb(81 109 114 / 39%);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--card-border);
+   
+    transition: var(--transition);
+}
+
+.navbar.scrolled {
+    background: rgb(65 80 85 / 39%);  
+    padding: 10px 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--text-color) !important;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: var(--transition);
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+.navbar-brand:hover {
+    color: var(--primary-color) !important;
+}
+
+.navbar-brand img {
+    height: 40px;
+    margin-left: 15px; /* Use margin-left for RTL */
+    transition: var(--transition);
+    filter: drop-shadow(0 0 5px var(--accent-color));
+}
+
+.nav-link {
+    color: var(--text-color) !important;
+    font-weight: 500;
+    margin: 0 8px;
+    padding: 10px 18px !important;
+    border-radius: 10px;
+    transition: var(--transition);
+    position: relative;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: var(--primary-color);
+    color: white !important;
+
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* --- Main Content --- */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 120px 20px 80px; /* Increased top padding for fixed navbar */
+    text-align: center;
+}
+
+.main-header {
+    margin-bottom: 50px;
+    animation: fadeIn 1s ease-out;
+}
+
+.main-header h1 {
+    font-weight: 700;
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #ffffff, var(--orb2-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+}
+
+/* --- Dashboard Cards --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    width: 100%;
+}
+
+.dashboard-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 8px 32px 0 var(--shadow-dark);
+    transition: var(--transition);
+    overflow: hidden;
+    position: relative;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--orb2-color));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-10px);
+   
+}
+
+.dashboard-card:hover::before {
+    transform: scaleX(1);
+}
+
+.dashboard-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 40px 30px;
+    height: 100%;
+}
+
+.card-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.dashboard-card:hover .card-icon {
+    color: var(--text-color);
+    transform: scale(1.1);
+}
+
+.card-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+/* --- Footer --- */
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    background:rgba(21, 83, 93, 0.34);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--card-border);
+}
+
+/* --- Animations --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .main-header h1 { font-size: 2.5rem; }
+    .dashboard-grid { grid-template-columns: 1fr; max-width: 500px; }
+}
+
+@media (max-width: 480px) {
+    .main-header h1 { font-size: 2rem; }
+    .navbar-brand { font-size: 1.2rem; }
+    .navbar-brand img { height: 30px; }
+    .card-icon { font-size: 2.5rem; }
+    .card-title { font-size: 1.5rem; }
+}
