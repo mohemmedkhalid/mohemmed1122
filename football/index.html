@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0f172a">
+    <title>خیزاڤا فۆتبۆل</title>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --secondary: #3b82f6;
+            --secondary-dark: #2563eb;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: #334155;
+            --gk: #facc15;
+            --def: #3b82f6;
+            --mid: #10b981;
+            --fwd: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            max-width: 500px;
+            margin: 0 auto;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 12px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .lang-btn {
+            width: auto;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            background: var(--bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+
+        .page { display: none; padding: 12px; animation: fadeIn 0.2s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+        }
+        .card-title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .lbl {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 12px 0 6px;
+        }
+        .hint { font-size: 0.8rem; color: var(--text-muted); margin: 6px 0 10px; line-height: 1.5; }
+        .muted { color: var(--text-muted); font-size: 0.82rem; font-weight: normal; }
+        .mt { margin-top: 10px; }
+
+        .input-group { display: flex; gap: 8px; margin-bottom: 10px; }
+
+        input, select, textarea {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 11px;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            min-width: 0;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+        input { flex: 2; }
+        select { flex: 1; }
+        textarea { width: 100%; resize: vertical; line-height: 1.5; }
+        .full { width: 100%; display: block; }
+        .num-input { flex: 0 0 90px; text-align: center; }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            color: inherit;
+        }
+        button:active { transform: scale(0.97); }
+        button:disabled { opacity: 0.6; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        .btn-secondary { background: var(--secondary); color: #fff; }
+        .btn-warning { background: var(--warning); color: #000; }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-share { background: #25D366; color: #fff; }
+        .btn-ghost { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+        .btn-sm { width: auto; padding: 6px 10px; font-size: 0.8rem; border-radius: 8px; }
+        .btn-fit { width: auto; flex-shrink: 0; padding: 11px 16px; }
+        .btn-big { font-size: 1.1rem; padding: 15px; }
+        .btn-row { display: flex; gap: 8px; margin-top: 10px; }
+
+        /* ---------- لیستا یاریزانان ---------- */
+        .attendance-bar { display: flex; gap: 8px; margin-bottom: 10px; }
+        .attendance-bar button { padding: 8px; font-size: 0.82rem; }
+
+        .group-h {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--text-muted);
+            margin: 12px 2px 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .group-h:first-child { margin-top: 0; }
+        .group-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            padding: 8px;
+            background: var(--bg);
+            border-radius: 10px;
+            margin-bottom: 7px;
+            border: 1px solid var(--border);
+            transition: opacity 0.2s, border-color 0.2s;
+        }
+        .player-item.absent { opacity: 0.5; border-color: rgba(239, 68, 68, 0.35); }
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
+        }
+        .pname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        .num-badge {
+            min-width: 30px;
+            height: 30px;
+            padding: 0 4px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 2px solid var(--border);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .role-chip {
+            font-size: 0.68rem;
+            font-weight: bold;
+            padding: 2px 7px;
+            border-radius: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .role-GK { background: rgba(250, 204, 21, 0.18); color: var(--gk); }
+        .role-DEF { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        .role-MID { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+        .role-FWD { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .role- { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
+
+        .status-pill {
+            font-size: 0.78rem;
+            font-weight: bold;
+            padding: 6px 9px;
+            border-radius: 8px;
+            width: auto;
+            white-space: nowrap;
+        }
+        .status-present { background: rgba(16, 185, 129, 0.18); color: var(--primary); border: 1px solid rgba(16, 185, 129, 0.4); }
+        .status-absent { background: rgba(239, 68, 68, 0.18); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.4); }
+
+        .actions { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
+        .icon-btn { width: 32px; height: 32px; padding: 0; border-radius: 8px; font-size: 0.85rem; flex-shrink: 0; }
+        .edit-btn { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .del-btn { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .cap-btn { background: transparent; border: 1px dashed var(--border); color: var(--text-muted); font-weight: 900; }
+        .cap-btn.on { background: var(--warning); border: 1px solid var(--warning); color: #000; }
+        .cap-mark {
+            background: var(--warning);
+            color: #000;
+            font-size: 0.65rem;
+            font-weight: 900;
+            border-radius: 50%;
+            width: 17px;
+            height: 17px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* ---------- هەلبژارتن (segmented / chips) ---------- */
+        .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .seg button {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            color: var(--text-muted);
+            padding: 12px 8px;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .seg button b { font-size: 1.3rem; color: var(--text); }
+        .seg button span { font-size: 0.75rem; font-weight: normal; }
+        .seg button.on { border-color: var(--primary); background: rgba(16, 185, 129, 0.12); color: var(--primary); }
+
+        .chips-row { display: flex; flex-wrap: wrap; gap: 7px; }
+        .chip-btn {
+            width: auto;
+            padding: 8px 13px;
+            font-size: 0.88rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 20px;
+            direction: ltr;
+        }
+        .chip-btn.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+        /* ---------- یاریگەه (Pitch) ---------- */
+        .pitch {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 7 / 9;
+            border-radius: 16px;
+            overflow: hidden;
+            background: repeating-linear-gradient(180deg, #166534 0 11.11%, #15803d 11.11% 22.22%);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            user-select: none;
+        }
+        .pitch.compact { aspect-ratio: 7 / 7.5; }
+        .pl { position: absolute; border: 2px solid rgba(255, 255, 255, 0.35); pointer-events: none; }
+        .pl-out { inset: 8px; border-radius: 6px; }
+        .pl-half { left: 8px; right: 8px; top: 50%; height: 0; border-width: 2px 0 0 0; }
+        .pl-circle { left: 50%; top: 50%; width: 24%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); }
+        .pl-box { left: 27%; right: 27%; height: 11%; }
+        .pl-box.top { top: 8px; border-top: none; }
+        .pl-box.bottom { bottom: 8px; border-bottom: none; }
+
+        .slot {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            width: 74px;
+            padding: 0;
+            background: none;
+            color: #fff;
+            flex-direction: column;
+            gap: 3px;
+            z-index: 2;
+        }
+        .slot:active { transform: translate(-50%, -50%) scale(0.93); }
+        .shirt {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #fff;
+            color: #0f172a;
+            font-weight: 900;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--mid);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+        }
+        .slot.r-GK .shirt { border-color: var(--gk); background: #fef9c3; }
+        .slot.r-DEF .shirt { border-color: var(--def); }
+        .slot.r-MID .shirt { border-color: var(--mid); }
+        .slot.r-FWD .shirt { border-color: var(--fwd); }
+        .slot.empty .shirt {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border: 2px dashed rgba(255, 255, 255, 0.75);
+            box-shadow: none;
+            font-size: 1.3rem;
+        }
+        .slot.absent .shirt { background: #fecaca; border-color: var(--danger); }
+        .slot.target .shirt { animation: pulse 1s infinite; }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.9); }
+            50% { box-shadow: 0 0 0 8px rgba(250, 204, 21, 0); }
+        }
+        .slot-name {
+            font-size: 0.72rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2px 6px;
+            border-radius: 6px;
+            max-width: 74px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .slot.empty .slot-name { background: rgba(0, 0, 0, 0.3); font-weight: normal; }
+        .slot.absent .slot-name { background: var(--danger); }
+        .slot .cap-mark { position: absolute; top: -6px; right: -7px; }
+        .goal-badge {
+            position: absolute;
+            bottom: -6px;
+            left: -9px;
+            background: #fff;
+            color: #000;
+            font-size: 0.62rem;
+            font-weight: bold;
+            border-radius: 8px;
+            padding: 1px 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+            direction: ltr;
+        }
+        .slot-min { font-size: 0.64rem; background: rgba(0, 0, 0, 0.45); padding: 0 5px; border-radius: 5px; direction: ltr; }
+
+        .pitch.compact .slot { width: 60px; }
+        .pitch.compact .shirt { width: 34px; height: 34px; font-size: 0.8rem; border-width: 2px; }
+        .pitch.compact .slot-name { font-size: 0.62rem; max-width: 60px; padding: 1px 4px; }
+
+        .bench { display: flex; flex-wrap: wrap; gap: 7px; }
+        .bench-chip {
+            width: auto;
+            padding: 7px 10px;
+            font-size: 0.85rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 20px;
+            font-weight: normal;
+        }
+        .bench-chip.sel { border-color: var(--gk); background: rgba(250, 204, 21, 0.15); color: var(--gk); font-weight: bold; }
+        .bench-chip .n { font-weight: bold; color: var(--text-muted); }
+        .bench-chip .m { font-size: 0.72rem; color: var(--text-muted); direction: ltr; }
+        .empty-text { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 10px; }
+        .status-text { font-size: 0.78rem; color: var(--primary); font-weight: normal; }
+        .warn-box {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            border-radius: 10px;
+            padding: 9px 10px;
+            font-size: 0.82rem;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+        .pick-banner {
+            background: rgba(250, 204, 21, 0.14);
+            border: 1px solid rgba(250, 204, 21, 0.5);
+            color: var(--gk);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        /* ---------- یارییا ڕاستەوخۆ ---------- */
+        .timer-box {
+            text-align: center;
+            background: var(--card);
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+        .timer-sub { font-size: 0.8rem; color: var(--text-muted); }
+        .timer-display {
+            font-size: 2.6rem;
+            font-weight: bold;
+            font-variant-numeric: tabular-nums;
+            color: var(--warning);
+            letter-spacing: 2px;
+            direction: ltr;
+        }
+        .timer-display.over { color: var(--danger); }
+        .timer-controls { display: flex; gap: 8px; margin-top: 8px; }
+
+        .split-scoreboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            height: 170px;
+            margin-bottom: 14px;
+        }
+        .half-screen {
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+            padding: 10px;
+            text-align: center;
+            min-width: 0;
+        }
+        .half-screen:active { transform: scale(0.96); }
+        .half-a { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+        .half-b { background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; }
+        .half-name { font-weight: bold; font-size: 1rem; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .half-score { font-size: 3.6rem; font-weight: 900; line-height: 1; margin: 8px 0; }
+        .half-hint { font-size: 0.78rem; opacity: 0.95; background: rgba(0, 0, 0, 0.2); padding: 4px 10px; border-radius: 20px; }
+
+        .feed-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+        }
+        .feed-item.a { border-right: 4px solid var(--primary); }
+        .feed-item.b { border-right: 4px solid var(--secondary); }
+        .feed-item.s { border-right: 4px solid var(--warning); }
+        .minute { font-weight: bold; color: var(--warning); direction: ltr; display: inline-block; min-width: 30px; }
+
+        /* ---------- مۆدال / شیت ---------- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-content {
+            background: var(--card);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px 20px 0 0;
+            padding: 18px 16px calc(18px + env(safe-area-inset-bottom));
+            max-height: 88vh;
+            overflow-y: auto;
+            border-top: 2px solid var(--primary);
+            animation: slideUp 0.2s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+        .pick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; }
+        .pick-grid.nums { grid-template-columns: repeat(4, 1fr); }
+        .pick-btn {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px 8px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            flex-direction: column;
+            gap: 3px;
+            min-width: 0;
+        }
+        .pick-btn .pn { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .pick-btn small { font-size: 0.72rem; color: var(--text-muted); font-weight: normal; }
+        .pick-btn.cur { border-color: var(--primary); }
+        .pick-btn:active { background: var(--primary); }
+        .pick-list .pick-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-start;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 10px;
+            margin-bottom: 7px;
+            font-weight: normal;
+            text-align: start;
+        }
+        .pick-row .pname { flex: 1; font-weight: bold; }
+        .pick-row.cur { border-color: var(--primary); background: rgba(16, 185, 129, 0.1); }
+        .tag { font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; }
+        .sheet-section { font-size: 0.8rem; color: var(--text-muted); margin: 12px 0 4px; font-weight: bold; }
+        .player-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .player-head .big-num { min-width: 46px; height: 46px; font-size: 1.1rem; }
+
+        /* ---------- مێژوو و ئامار ---------- */
+        .match-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        .mc-head { padding: 12px; cursor: pointer; }
+        .mc-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .mc-score { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
+        .mc-score .tn { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.95rem; }
+        .mc-score .tn.a { color: var(--primary); text-align: left; }
+        .mc-score .tn.b { color: #93c5fd; text-align: right; }
+        .mc-score .sc { font-size: 1.5rem; }
+        .mc-body { padding: 0 12px 12px; border-top: 1px dashed var(--border); }
+        .res-badge { font-size: 0.72rem; font-weight: bold; padding: 2px 9px; border-radius: 6px; }
+        .res-win { background: rgba(16, 185, 129, 0.2); color: var(--primary); }
+        .res-draw { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .res-loss { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .res-legacy { background: rgba(148, 163, 184, 0.2); color: var(--text-muted); }
+        .mini-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            padding: 6px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+        .mini-row .pname { flex: 1; }
+        .mini-row .v { color: var(--text-muted); font-size: 0.8rem; direction: ltr; }
+
+        .record-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .rec-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 4px; text-align: center; }
+        .rec-box b { display: block; font-size: 1.4rem; }
+        .rec-box span { font-size: 0.75rem; color: var(--text-muted); }
+
+        .stats-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+        .stats-table th { color: var(--text-muted); font-weight: normal; font-size: 0.75rem; padding: 6px 4px; text-align: center; }
+        .stats-table th:first-child, .stats-table td:first-child { text-align: start; }
+        .stats-table td { padding: 8px 4px; border-top: 1px solid var(--border); text-align: center; }
+        .stats-table td:first-child { font-weight: bold; }
+
+        /* ---------- بارێ خوارێ ---------- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+            z-index: 500;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 2px;
+            position: relative;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-icon { font-size: 1.3rem; }
+        .live-dot {
+            position: absolute;
+            top: 2px;
+            left: calc(50% + 8px);
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--danger);
+            display: none;
+            animation: blink 1s infinite;
+        }
+        .live-dot.on { display: block; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        .toast {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-dark);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.88rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            z-index: 2000;
+            text-align: center;
+            width: max-content;
+            max-width: 90%;
+        }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 id="appTitle">⚽ خیزاڤا</h1>
+    <button id="langBtn" class="lang-btn" onclick="toggleLang()">عربي</button>
+</header>
+
+<!-- 1. یاریزانێن تیمێ سەرەکی -->
+<div id="page-squad" class="page active">
+    <div class="card">
+        <div class="card-title" data-i18n="team_name_label"></div>
+        <div class="input-group" style="margin-bottom:0">
+            <input type="text" id="teamNameInput" maxlength="60">
+            <button class="btn-primary btn-fit" onclick="saveTeamName()" data-i18n="save"></button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title" data-i18n="add_player_title"></div>
+        <input type="text" id="newPlayerName" class="full" maxlength="100" data-i18n-ph="player_name_ph" style="margin-bottom:8px">
+        <div class="input-group">
+            <input type="number" id="newPlayerNumber" class="num-input" inputmode="numeric" min="0" max="999" data-i18n-ph="number_ph">
+            <select id="newPlayerRole"></select>
+        </div>
+        <button class="btn-primary" onclick="addPlayer()" data-i18n="add_btn"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <span id="squadCount"></span>
+            <span id="absentCountLbl" style="font-size:0.8rem; color:var(--danger); font-weight:normal"></span>
+        </div>
+        <div class="attendance-bar">
+            <button class="btn-ghost" onclick="setAllPresent(true)" data-i18n="all_present"></button>
+            <button class="btn-ghost" onclick="setAllPresent(false)" data-i18n="all_absent"></button>
+        </div>
+        <div class="hint" data-i18n="squad_hint"></div>
+        <div id="playerList"></div>
+    </div>
+</div>
+
+<!-- 2. پێکهاتە / تەشکیلە -->
+<div id="page-lineup" class="page">
+    <div class="card">
+        <div class="card-title" data-i18n="players_per_side"></div>
+        <div class="seg" id="formatSegLineup"></div>
+        <div class="lbl" data-i18n="formation"></div>
+        <div class="chips-row" id="formationChips"></div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <span><span data-i18n="lineup_title"></span> <span id="lineupFilled" class="muted"></span></span>
+            <span id="lineupStatus" class="status-text"></span>
+        </div>
+        <div id="lineupBanner"></div>
+        <div id="lineupPitch"></div>
+        <div class="btn-row">
+            <button class="btn-ghost" onclick="autoFillLineup()" data-i18n="autofill"></button>
+            <button class="btn-ghost" onclick="clearLineup()" data-i18n="clear"></button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title"><span data-i18n="bench"></span><span id="lineupBenchCount" class="muted"></span></div>
+        <div class="hint" data-i18n="bench_hint"></div>
+        <div id="lineupBench" class="bench"></div>
+        <div id="lineupWarn"></div>
+    </div>
+</div>
+
+<!-- 3. یاری: ئامادەکرن + ڕاستەوخۆ -->
+<div id="page-match" class="page">
+    <div id="matchSetup">
+        <div class="card">
+            <div class="card-title" data-i18n="new_match"></div>
+            <label class="lbl" for="setupTeamName" style="margin-top:0" data-i18n="our_team"></label>
+            <input type="text" id="setupTeamName" class="full" maxlength="60" oninput="setupTouched=true">
+            <label class="lbl" for="setupOppName" data-i18n="opponent"></label>
+            <input type="text" id="setupOppName" class="full" maxlength="60" list="oppNamesList" data-i18n-ph="opp_name_ph">
+            <datalist id="oppNamesList"></datalist>
+
+            <div class="lbl" data-i18n="players_per_side"></div>
+            <div class="seg" id="formatSegSetup"></div>
+
+            <label class="lbl" for="setupDuration" data-i18n="duration"></label>
+            <div class="input-group" style="margin-bottom:0; align-items:center">
+                <div class="chips-row" id="durationChips" style="flex:1"></div>
+                <input type="number" id="setupDuration" class="num-input" inputmode="numeric" min="1" max="180" style="flex:0 0 76px" oninput="renderDurationChips()">
+            </div>
+
+            <label class="lbl" for="setupOppPlayers" data-i18n="opp_players"></label>
+            <textarea id="setupOppPlayers" rows="3" data-i18n-ph="opp_players_ph"></textarea>
+            <div class="hint" data-i18n="opp_players_hint"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span data-i18n="lineup_preview"></span>
+                <span id="setupLineupCount" class="muted"></span>
+            </div>
+            <div id="setupPitch"></div>
+            <div id="setupWarn"></div>
+            <button class="btn-ghost mt" onclick="switchPage('lineup')" data-i18n="edit_lineup"></button>
+        </div>
+
+        <button class="btn-warning btn-big" onclick="startMatch()" data-i18n="start_match"></button>
+    </div>
+
+    <div id="matchLive" style="display:none">
+        <div class="timer-box">
+            <div class="timer-sub"><span data-i18n="time_left"></span> · <span id="elapsedLbl"></span></div>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+                <button class="btn-primary btn-sm" style="flex:1" id="timerToggleBtn" onclick="toggleTimer()"></button>
+                <button class="btn-ghost btn-sm" onclick="addExtraTime(false)" data-i18n="plus5"></button>
+            </div>
+        </div>
+
+        <div class="split-scoreboard">
+            <div class="half-screen half-a" onclick="openGoalSheet('A')">
+                <div class="half-name" id="liveNameA"></div>
+                <div class="half-score" id="liveScoreA">0</div>
+                <div class="half-hint" data-i18n="add_goal"></div>
+            </div>
+            <div class="half-screen half-b" onclick="openGoalSheet('B')">
+                <div class="half-name" id="liveNameB"></div>
+                <div class="half-score" id="liveScoreB">0</div>
+                <div class="half-hint" data-i18n="add_goal"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <span data-i18n="on_field"></span>
+                <span id="liveFormation" class="muted" style="direction:ltr"></span>
+            </div>
+            <div class="hint" data-i18n="live_hint"></div>
+            <div id="livePitch"></div>
+            <div class="lbl" data-i18n="bench"></div>
+            <div id="liveBench" class="bench"></div>
+            <button class="btn-secondary mt" onclick="openSubFlow()" data-i18n="substitution"></button>
+        </div>
+
+        <div class="card">
+            <div class="card-title" data-i18n="goals_title"></div>
+            <div id="liveGoalsList"></div>
+        </div>
+
+        <div class="card" id="liveSubsCard">
+            <div class="card-title" data-i18n="subs_title"></div>
+            <div id="liveSubsList"></div>
+        </div>
+
+        <button class="btn-primary btn-big" style="margin-bottom:10px" onclick="openFinishSheet(false)" data-i18n="finish_match"></button>
+        <button class="btn-danger" onclick="cancelLiveMatch()" data-i18n="cancel_match"></button>
+    </div>
+</div>
+
+<!-- 4. مێژوو -->
+<div id="page-history" class="page">
+    <div class="card">
+        <div class="card-title" data-i18n="history_title"></div>
+        <div id="historyList"></div>
+    </div>
+</div>
+
+<!-- 5. ئامار -->
+<div id="page-stats" class="page">
+    <div class="card">
+        <div class="card-title" data-i18n="team_record"></div>
+        <div id="recordGrid" class="record-grid"></div>
+    </div>
+    <div class="card">
+        <div class="card-title" data-i18n="top_scorers"></div>
+        <div id="scorersList"></div>
+    </div>
+    <div class="card">
+        <div class="card-title" data-i18n="players_stats"></div>
+        <div id="playerStatsTable"></div>
+    </div>
+</div>
+
+<!-- شیتا گشتی -->
+<div id="sheet" class="modal-overlay" onclick="if (event.target === this) closeSheet()">
+    <div class="modal-content">
+        <div class="card-title">
+            <span id="sheetTitle"></span>
+            <button class="btn-sm btn-ghost" onclick="closeSheet()" data-i18n="close"></button>
+        </div>
+        <div id="sheetBody"></div>
+    </div>
+</div>
+
+<nav class="bottom-nav">
+    <button class="nav-item active" id="nav-squad" onclick="switchPage('squad')">
+        <span class="nav-icon">👥</span><span data-i18n="nav_squad"></span>
+    </button>
+    <button class="nav-item" id="nav-lineup" onclick="switchPage('lineup')">
+        <span class="nav-icon">📋</span><span data-i18n="nav_lineup"></span>
+    </button>
+    <button class="nav-item" id="nav-match" onclick="switchPage('match')">
+        <span class="nav-icon">⚽</span><span data-i18n="nav_match"></span>
+        <span class="live-dot" id="liveDot"></span>
+    </button>
+    <button class="nav-item" id="nav-history" onclick="switchPage('history')">
+        <span class="nav-icon">📜</span><span data-i18n="nav_history"></span>
+    </button>
+    <button class="nav-item" id="nav-stats" onclick="switchPage('stats')">
+        <span class="nav-icon">🏆</span><span data-i18n="nav_stats"></span>
+    </button>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    // =====================================================================
+    // وەرگێڕان (کوردی / عەرەبی)
+    // =====================================================================
+    const I18N = {
+        ku: {
+            default_team: 'خیزاڤا',
+            nav_squad: 'یاریزان', nav_lineup: 'پێکهاتە', nav_match: 'یاری', nav_history: 'مێژوو', nav_stats: 'ئامار',
+            team_name_label: 'ناڤێ تیمێ سەرەکی', save: 'پاراستن', team_name_saved: 'ناڤێ تیمی هاتە پاراستن',
+            add_player_title: 'زێدەکرنا یاریزانەکێ نوی', player_name_ph: 'ناڤێ یاریزانی...', number_ph: 'ژمارە',
+            add_btn: '+ زێدەکرن', present: '✅ ئامادە', absent: '❌ نەئامادە',
+            all_present: '✅ هەمی ئامادە', all_absent: '❌ هەمی نەئامادە',
+            all_present_toast: 'هەمی یاریزان کرنە ئامادە', all_absent_toast: 'هەمی یاریزان کرنە نەئامادە',
+            squad_count: 'ئامادە: {p} / {t}', absent_count: 'نەئامادە: {n}',
+            squad_hint: 'ل سەر ناڤی بدە بۆ گوهۆڕینا ئامادەبوونێ · C = کاپتن',
+            no_players: 'هێشتا چ یاریزان نینن', enter_name: 'ناڤێ یاریزانی بنڤیسە!',
+            player_added: 'یاریزان هاتە زێدەکرن', player_updated: 'زانیاری هاتنە گۆڕین', player_deleted: 'یاریزان هاتە ژێبرن',
+            confirm_delete_player: 'تە دڤێت ئەڤی یاریزانی ژێ ببەی؟',
+            edit_player: 'دەستکاریکرنا یاریزانی', save_changes: 'پاراستنا گۆڕانکارییان', delete_player: '🗑️ ژێبرنا یاریزانی',
+            captain: 'کاپتن', captain_set: '{name} بوو کاپتن', captain_removed: 'کاپتن هاتە لادان',
+            role_label: 'ڕۆل / جه', role_: 'بێ ڕۆل', role_GK: 'گۆلپارێز', role_DEF: 'بەرگری', role_MID: 'ناڤەڕاست', role_FWD: 'هێرش',
+            players_per_side: 'ژمارا یاریزانان بۆ هەر تیمەکی', n_players: '{n} یاریزان',
+            formation: 'پلانا یارییێ', lineup_title: 'پێکهاتا تیمی',
+            autofill: '⚡ پڕکرنا ئۆتۆماتیکی', clear: '🧹 پاقژکرن', clear_confirm: 'تە دڤێت هەمی جهان ڤالا بکەی؟',
+            bench: 'یەدەگ', bench_hint: 'ل سەر یاریزانەکێ یەدەگ بدە، پاشان ل سەر جهەکی ل یاریگەهێ بدە',
+            bench_empty: 'چ یاریزانێن یەدەگ نینن',
+            saving: 'پاراستن...', saved: 'هاتە پاراستن ✓', save_failed: '⚠️ نەهاتە پاراستن',
+            pick_for_slot: 'یاریزانەکی بۆ جهێ ({role}) هەلبژێرە', remove_from_slot: 'لادان ژ ڤی جهی',
+            in_slot: 'د پێکهاتێ دایە ({role})', current: 'نۆکە ل ڤێرێیە', no_present: 'چ یاریزانێن ئامادە نینن',
+            place_banner: 'نۆکە جهەکی بۆ «{name}» ل یاریگەهێ هەلبژێرە', absent_in_lineup: '⚠️ ئەڤ یاریزانە نەئامادەنە و د پێکهاتێ دانە: {names}',
+            new_match: 'یارییەکا نوی', our_team: 'ناڤێ تیمێ مە', opponent: 'ناڤێ تیمێ بەرامبەر',
+            opp_name_ph: 'ناڤێ تیمێ بەرامبەر...', opp_default: 'بەرامبەر',
+            duration: 'دەمێ یارییێ (دەقیقە)',
+            opp_players: 'یاریزانێن تیمێ بەرامبەر (ئەگەر تە دڤێت)',
+            opp_players_ph: 'هەر ناڤەک ل ڕێزەکێ یان ب کۆما (،) جودا بکە',
+            opp_players_hint: 'ئەگەر ڤالا بهێلی، دەمێ گۆلێ ژمارا یاریزانی هەلدبژێری.',
+            lineup_preview: 'پێکهاتا دەستپێکێ', edit_lineup: '✏️ دەستکاریکرنا پێکهاتێ',
+            start_match: '▶️ دەستپێکرنا یارییێ', match_started: '⏱️ یاری دەستپێکر!',
+            need_one: 'پێدڤییە ل کێماسی یاریزانەک د پێکهاتێ دا هەبیت!',
+            incomplete_confirm: 'پێکهاتە تمام نینە ({f} ژ {n}). تە دڤێت هەر دەستپێ بکەی؟',
+            time_left: 'دەمێ مای', minute_n: 'دەقیقە {m}', pause: '⏸️ ڕاگرتن', resume: '▶️ بەردەوامبوون', plus5: '+5 دەقیقە',
+            add_goal: '+ گۆل', on_field: 'د یاریگەهێ دا', live_hint: 'ل سەر یاریزانی بدە بۆ گۆلێ یان گوهۆڕینێ',
+            goals_title: 'گۆلێن یارییێ', no_goals: 'هێشتا چ گۆل نەهاتینە تۆمارکرن',
+            who_scored: 'کێ گۆل بۆ «{team}» تۆمارکر؟', own_goal: 'گۆلا خۆیی', unknown: 'نەدیار',
+            player_number: 'ژمارا یاریزانی', other_number: 'ژمارەکا دی', ok: 'باشە', bench_players: 'یەدەگ',
+            goal_toast: '⚽ گۆل! {name}',
+            substitution: '🔄 گوهۆڕینا یاریزانان', subs_title: 'گوهۆڕین', no_subs: 'هێشتا چ گوهۆڕین نەبووینە',
+            who_out: 'کێ دەردکەڤیت؟', who_in: 'کێ دچیتە جهێ «{name}»؟', who_replace: '«{name}» دچیتە جهێ کێ؟',
+            empty_slot_n: 'جهێ ڤالا ({role})', no_bench: 'چ یاریزانێن یەدەگ نینن', no_field: 'چ یاریزان د یاریگەهێ دا نینن',
+            sub_toast: '🔄 {in} ⬅️ {out}', record_goal: '⚽ تۆمارکرنا گۆلێ', sub_out: '🔄 دەرئێخستن (گوهۆڕین)',
+            minutes_played: 'دەقیقێن یاریکرنێ', goals_word: 'گۆل',
+            finish_match: '💾 بداویهینانا یارییێ و پاراستن', cancel_match: '❌ هەلوەشاندنا یارییێ',
+            confirm_cancel: 'تە دڤێت ئەڤێ یارییێ هەلوەشینی بێی پاراستن؟',
+            time_up: '⏰ دەمێ یارییێ ب داوی هات!', summary: 'پوختەیا یارییێ', save_match: '💾 پاراستنا یارییێ',
+            extra_time: '⏱️ +5 دەقیقە زێدە', match_saved: 'یاری ب سەرکەفتیانە هاتە پاراستن!',
+            win: 'سەرکەفتن', draw: 'بەرابەری', loss: 'شکەستن', legacy: 'یارییا کەڤن',
+            history_title: 'مێژوویا هەمی یارییان', no_matches: 'هێشتا چ یاری نەهاتینە پاراستن',
+            share: '📤 بەلاڤکرنا ڕاپۆرتێ', delete: '🗑️ ژێبرن', confirm_delete_match: 'تە دڤێت ئەڤێ یارییێ ژ مێژوویێ ژێ ببەی؟',
+            match_deleted: 'یاری هاتە ژێبرن', report_copied: 'ڕاپۆرت هاتە کۆپیکرن!', report_title: 'ڕاپۆرتا یارییێ',
+            starters: 'یاریزانێن سەرەکی', subs_used: 'یەدەگێن بەشداربووی', result: 'ئەنجام', scorers: 'گۆلکەر',
+            team_record: 'ئەنجامێن تیمی', played: 'یاری', goals_for: 'گۆلێن مە', goals_against: 'ل سەر مە',
+            top_scorers: '🏆 ڕێزبەندییا گۆلکەران', players_stats: '📊 ئامارا یاریزانان', apps: 'یاری', mins: 'دەقیقە',
+            no_stats: 'هێشتا چ ئامار نینن', close: 'گرتن', cancel: 'هەلوەشاندن',
+            conn_error: 'پەیوەندی دگەل بنگەهێ زانیارییان نینە!', save_error: 'پاراستن سەرنەکەفت، دووبارە هەول بدە',
+            lang_btn: 'عربي'
+        },
+        ar: {
+            default_team: 'خیزاڤا',
+            nav_squad: 'اللاعبون', nav_lineup: 'التشكيلة', nav_match: 'المباراة', nav_history: 'السجل', nav_stats: 'الإحصائيات',
+            team_name_label: 'اسم الفريق الأساسي', save: 'حفظ', team_name_saved: 'تم حفظ اسم الفريق',
+            add_player_title: 'إضافة لاعب جديد', player_name_ph: 'اسم اللاعب...', number_ph: 'الرقم',
+            add_btn: '+ إضافة', present: '✅ حاضر', absent: '❌ غائب',
+            all_present: '✅ الكل حاضر', all_absent: '❌ الكل غائب',
+            all_present_toast: 'تم تحديد جميع اللاعبين كحاضرين', all_absent_toast: 'تم تحديد جميع اللاعبين كغائبين',
+            squad_count: 'الحاضرون: {p} / {t}', absent_count: 'الغائبون: {n}',
+            squad_hint: 'اضغط على الاسم لتغيير الحضور · C = الكابتن',
+            no_players: 'لا يوجد لاعبون بعد', enter_name: 'اكتب اسم اللاعب!',
+            player_added: 'تمت إضافة اللاعب', player_updated: 'تم تعديل البيانات', player_deleted: 'تم حذف اللاعب',
+            confirm_delete_player: 'هل تريد حذف هذا اللاعب؟',
+            edit_player: 'تعديل اللاعب', save_changes: 'حفظ التعديلات', delete_player: '🗑️ حذف اللاعب',
+            captain: 'الكابتن', captain_set: '{name} أصبح الكابتن', captain_removed: 'تم إلغاء الكابتن',
+            role_label: 'المركز', role_: 'بدون مركز', role_GK: 'حارس', role_DEF: 'دفاع', role_MID: 'وسط', role_FWD: 'هجوم',
+            players_per_side: 'عدد اللاعبين لكل فريق', n_players: '{n} لاعبين',
+            formation: 'خطة اللعب', lineup_title: 'تشكيلة الفريق',
+            autofill: '⚡ تعبئة تلقائية', clear: '🧹 مسح', clear_confirm: 'هل تريد إفراغ جميع المراكز؟',
+            bench: 'الاحتياط', bench_hint: 'اضغط على لاعب احتياط ثم اضغط على مركز في الملعب',
+            bench_empty: 'لا يوجد لاعبون احتياط',
+            saving: 'جارٍ الحفظ...', saved: 'تم الحفظ ✓', save_failed: '⚠️ لم يتم الحفظ',
+            pick_for_slot: 'اختر لاعباً لمركز ({role})', remove_from_slot: 'إزالة من هذا المركز',
+            in_slot: 'في التشكيلة ({role})', current: 'موجود هنا الآن', no_present: 'لا يوجد لاعبون حاضرون',
+            place_banner: 'اختر الآن مركزاً لـ «{name}» في الملعب', absent_in_lineup: '⚠️ هؤلاء اللاعبون غائبون وموجودون في التشكيلة: {names}',
+            new_match: 'مباراة جديدة', our_team: 'اسم فريقنا', opponent: 'اسم الفريق المنافس',
+            opp_name_ph: 'اسم الفريق المنافس...', opp_default: 'المنافس',
+            duration: 'مدة المباراة (دقيقة)',
+            opp_players: 'لاعبو الفريق المنافس (اختياري)',
+            opp_players_ph: 'كل اسم في سطر أو افصل بينها بفاصلة (،)',
+            opp_players_hint: 'إذا تركته فارغاً، ستختار رقم اللاعب عند تسجيل الهدف.',
+            lineup_preview: 'التشكيلة الأساسية', edit_lineup: '✏️ تعديل التشكيلة',
+            start_match: '▶️ بدء المباراة', match_started: '⏱️ بدأت المباراة!',
+            need_one: 'يجب وضع لاعب واحد على الأقل في التشكيلة!',
+            incomplete_confirm: 'التشكيلة غير مكتملة ({f} من {n}). هل تريد البدء على أي حال؟',
+            time_left: 'الوقت المتبقي', minute_n: 'الدقيقة {m}', pause: '⏸️ إيقاف', resume: '▶️ استئناف', plus5: '+5 دقائق',
+            add_goal: '+ هدف', on_field: 'في الملعب', live_hint: 'اضغط على اللاعب لتسجيل هدف أو تبديله',
+            goals_title: 'أهداف المباراة', no_goals: 'لم يتم تسجيل أهداف بعد',
+            who_scored: 'من سجل الهدف لـ «{team}»؟', own_goal: 'هدف عكسي', unknown: 'غير معروف',
+            player_number: 'رقم اللاعب', other_number: 'رقم آخر', ok: 'تم', bench_players: 'الاحتياط',
+            goal_toast: '⚽ هدف! {name}',
+            substitution: '🔄 تبديل اللاعبين', subs_title: 'التبديلات', no_subs: 'لا توجد تبديلات بعد',
+            who_out: 'من يخرج؟', who_in: 'من يدخل بدلاً من «{name}»؟', who_replace: '«{name}» يدخل بدلاً من؟',
+            empty_slot_n: 'مركز فارغ ({role})', no_bench: 'لا يوجد لاعبون في الاحتياط', no_field: 'لا يوجد لاعبون في الملعب',
+            sub_toast: '🔄 {in} ⬅️ {out}', record_goal: '⚽ تسجيل هدف', sub_out: '🔄 إخراج (تبديل)',
+            minutes_played: 'دقائق اللعب', goals_word: 'هدف',
+            finish_match: '💾 إنهاء المباراة وحفظها', cancel_match: '❌ إلغاء المباراة',
+            confirm_cancel: 'هل تريد إلغاء هذه المباراة دون حفظ؟',
+            time_up: '⏰ انتهى وقت المباراة!', summary: 'ملخص المباراة', save_match: '💾 حفظ المباراة',
+            extra_time: '⏱️ +5 دقائق إضافية', match_saved: 'تم حفظ المباراة بنجاح!',
+            win: 'فوز', draw: 'تعادل', loss: 'خسارة', legacy: 'مباراة قديمة',
+            history_title: 'سجل كل المباريات', no_matches: 'لم يتم حفظ أي مباراة بعد',
+            share: '📤 مشاركة التقرير', delete: '🗑️ حذف', confirm_delete_match: 'هل تريد حذف هذه المباراة من السجل؟',
+            match_deleted: 'تم حذف المباراة', report_copied: 'تم نسخ التقرير!', report_title: 'تقرير المباراة',
+            starters: 'اللاعبون الأساسيون', subs_used: 'البدلاء المشاركون', result: 'النتيجة', scorers: 'الهدافون',
+            team_record: 'سجل الفريق', played: 'مباريات', goals_for: 'أهداف لنا', goals_against: 'أهداف علينا',
+            top_scorers: '🏆 ترتيب الهدافين', players_stats: '📊 إحصائيات اللاعبين', apps: 'مباريات', mins: 'دقائق',
+            no_stats: 'لا توجد إحصائيات بعد', close: 'إغلاق', cancel: 'إلغاء',
+            conn_error: 'لا يوجد اتصال بقاعدة البيانات!', save_error: 'فشل الحفظ، حاول مرة أخرى',
+            lang_btn: 'کوردی'
+        }
+    };
+
+    function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+    let lang = lsGet('xizava_lang') === 'ar' ? 'ar' : 'ku';
+
+    function t(key, vars) {
+        let s = (I18N[lang] && I18N[lang][key]) ?? I18N.ku[key] ?? key;
+        if (vars) Object.keys(vars).forEach(k => { s = s.split('{' + k + '}').join(vars[k]); });
+        return s;
+    }
+
+    function toggleLang() {
+        lang = lang === 'ku' ? 'ar' : 'ku';
+        lsSet('xizava_lang', lang);
+        renderAll();
+    }
+
+    // =====================================================================
+    // دۆخێ گشتی
+    // =====================================================================
+    const API_URL = 'api.php';
+    const LIVE_KEY = 'xizava_live_v2';
+    const ROLES = ['GK', 'DEF', 'MID', 'FWD', ''];
+    const FORMATIONS = {
+        7: ['3-2-1', '2-3-1', '3-1-2', '2-2-2', '3-3', '2-1-2-1'],
+        8: ['3-3-1', '3-2-2', '2-3-2', '3-1-3', '2-4-1', '2-3-1-1']
+    };
+    const DURATIONS = [40, 50, 60, 70, 90];
+
+    let players = [];
+    let matches = [];
+    let settings = {};
+    let lineups = { 7: null, 8: null };
+    let benchPick = null;
+    let lineupSaveTimers = {};
+    let expandedMatchId = null;
+    let setupTouched = false;
+    let currentPage = 'squad';
+
+    let live = null;
+    try { live = JSON.parse(lsGet(LIVE_KEY)); } catch (e) { live = null; }
+    if (!live || live.v !== 2) live = null;
+    lsDel('xizava_live_match');   // داتایێن وەشانا کەڤن
+    lsDel('xizava_absent_ids');
+    let timerInterval = null;
+    let wakeLock = null;
+
+    // =====================================================================
+    // ئامرازێن هاریکار
+    // =====================================================================
+    function esc(text) {
+        const div = document.createElement('div');
+        div.textContent = text == null ? '' : String(text);
+        return div.innerHTML;
+    }
+
+    function showToast(msg) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    function vibrate(ms) { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} }
+
+    async function api(action, body) {
+        const opts = body === undefined ? {} : {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        };
+        const res = await fetch(`${API_URL}?action=${action}`, opts);
+        const data = await res.json();
+        if (!data || data.status !== 'success') throw new Error((data && data.message) || 'error');
+        return data;
+    }
+
+    function openSheet(title, html) {
+        document.getElementById('sheetTitle').textContent = title;
+        document.getElementById('sheetBody').innerHTML = html;
+        document.getElementById('sheet').classList.add('open');
+    }
+    function closeSheet() { document.getElementById('sheet').classList.remove('open'); }
+
+    function playerById(id) { return players.find(p => p.id === id) || null; }
+    function presentPlayers() { return players.filter(p => p.present); }
+    function captainId() { const c = parseInt(settings.captain_id, 10); return Number.isFinite(c) ? c : null; }
+    function teamName() { return (settings.team_name || '').trim() || t('default_team'); }
+    function getFormat() { return parseInt(settings.format, 10) === 8 ? 8 : 7; }
+    function roleLabel(r) { return t('role_' + (r || '')); }
+    function roleChip(r) { return `<span class="role-chip role-${r || ''}">${esc(roleLabel(r))}</span>`; }
+    function numText(p) { return (p && p.number != null && p.number !== '') ? String(p.number) : ''; }
+    function shirtText(p) { return numText(p) || (p && p.name ? p.name.trim().charAt(0) : '?'); }
+    function capMark() { return `<span class="cap-mark">C</span>`; }
+    function roleOrder(r) { const i = ROLES.indexOf(r || ''); return i < 0 ? 9 : i; }
+    function byNumberName(a, b) {
+        const na = a.number == null ? 9999 : a.number;
+        const nb = b.number == null ? 9999 : b.number;
+        if (na !== nb) return na - nb;
+        return a.name.localeCompare(b.name);
+    }
+
+    function roleOptions(selected) {
+        return ROLES.map(r => `<option value="${r}" ${r === (selected || '') ? 'selected' : ''}>${esc(roleLabel(r))}</option>`).join('');
+    }
+
+    // =====================================================================
+    // بارکرنا داتایان
+    // =====================================================================
+    window.onload = async () => {
+        renderAll();
+        if (live) {
+            switchPage('match');
+            if (live.isRunning && live.endTime) { syncRemaining(); if (live && live.isRunning) startTimerInterval(); }
+        }
+        await loadData();
+    };
+
+    async function loadData() {
+        try {
+            const d = await api('get_all');
+            players = d.players || [];
+            matches = d.matches || [];
+            settings = d.settings || {};
+            initLineups();
+        } catch (e) {
+            showToast(t('conn_error'));
+        }
+        renderAll();
+    }
+
+    function initLineups() {
+        [7, 8].forEach(n => {
+            let lu = null;
+            try { lu = JSON.parse(settings['lineup_' + n] || 'null'); } catch (e) { lu = null; }
+            if (!lu || typeof lu !== 'object') lu = {};
+            const formation = FORMATIONS[n].includes(lu.formation) ? lu.formation : FORMATIONS[n][0];
+            let slots = Array.isArray(lu.slots) ? lu.slots.slice(0, n) : [];
+            while (slots.length < n) slots.push(null);
+            const seen = new Set();
+            slots = slots.map(id => {
+                id = parseInt(id, 10);
+                if (!Number.isFinite(id) || !playerById(id) || seen.has(id)) return null;
+                seen.add(id);
+                return id;
+            });
+            lineups[n] = { formation, slots };
+        });
+    }
+
+    function renderAll() {
+        applyStaticI18n();
+        renderSquad();
+        renderLineupPage();
+        renderMatchPage();
+        renderHistory();
+        renderStats();
+    }
+
+    function applyStaticI18n() {
+        document.documentElement.lang = lang === 'ar' ? 'ar' : 'ku';
+        document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+        document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+        document.getElementById('langBtn').textContent = t('lang_btn');
+        document.getElementById('appTitle').textContent = '⚽ ' + teamName();
+        document.title = teamName() + ' ⚽';
+        const roleSel = document.getElementById('newPlayerRole');
+        const cur = roleSel.value;
+        roleSel.innerHTML = roleOptions(cur);
+        const tn = document.getElementById('teamNameInput');
+        if (document.activeElement !== tn) tn.value = settings.team_name || '';
+        document.getElementById('liveDot').classList.toggle('on', !!live);
+    }
+
+    function switchPage(name) {
+        currentPage = name;
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('page-' + name).classList.add('active');
+        document.getElementById('nav-' + name).classList.add('active');
+        if (name !== 'lineup') benchPick = null;
+        if (name === 'lineup') renderLineupPage();
+        if (name === 'match') renderMatchPage();
+        if (name === 'history') renderHistory();
+        if (name === 'stats') renderStats();
+        window.scrollTo(0, 0);
+    }
+
+    // =====================================================================
+    // 1. یاریزانێن تیمێ سەرەکی
+    // =====================================================================
+    function renderSquad() {
+        const present = presentPlayers().length;
+        document.getElementById('squadCount').textContent = t('squad_count', { p: present, t: players.length });
+        document.getElementById('absentCountLbl').textContent = t('absent_count', { n: players.length - present });
+
+        const list = document.getElementById('playerList');
+        if (players.length === 0) {
+            list.innerHTML = `<div class="empty-text">${esc(t('no_players'))}</div>`;
+            return;
+        }
+        const cap = captainId();
+        const dotColor = { GK: 'var(--gk)', DEF: 'var(--def)', MID: 'var(--mid)', FWD: 'var(--fwd)', '': 'var(--text-muted)' };
+        let html = '';
+        ROLES.forEach(r => {
+            const group = players.filter(p => (p.position || '') === r).sort(byNumberName);
+            if (!group.length) return;
+            html += `<div class="group-h"><span class="group-dot" style="background:${dotColor[r]}"></span>${esc(roleLabel(r))} (${group.length})</div>`;
+            html += group.map(p => `
+                <div class="player-item ${p.present ? '' : 'absent'}">
+                    <div class="player-info" onclick="togglePresent(${p.id})">
+                        <span class="num-badge">${esc(numText(p) || '–')}</span>
+                        <span class="pname">${esc(p.name)}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="icon-btn cap-btn ${cap === p.id ? 'on' : ''}" onclick="toggleCaptain(${p.id})" title="${esc(t('captain'))}">C</button>
+                        <button class="status-pill ${p.present ? 'status-present' : 'status-absent'}" onclick="togglePresent(${p.id})">${esc(p.present ? t('present') : t('absent'))}</button>
+                        <button class="icon-btn edit-btn" onclick="openEditPlayer(${p.id})">✏️</button>
+                    </div>
+                </div>`).join('');
+        });
+        list.innerHTML = html;
+    }
+
+    async function saveTeamName() {
+        const name = document.getElementById('teamNameInput').value.trim();
+        try {
+            await api('save_setting', { key: 'team_name', value: name });
+            settings.team_name = name;
+            setupTouched = false;
+            renderAll();
+            showToast(t('team_name_saved'));
+        } catch (e) { showToast(t('save_error')); }
+    }
+
+    function readNumber(v) {
+        v = String(v ?? '').trim();
+        if (v === '') return null;
+        const n = parseInt(v, 10);
+        return Number.isFinite(n) && n >= 0 && n <= 999 ? n : null;
+    }
+
+    async function addPlayer() {
+        const name = document.getElementById('newPlayerName').value.trim();
+        const number = readNumber(document.getElementById('newPlayerNumber').value);
+        const position = document.getElementById('newPlayerRole').value;
+        if (!name) return showToast(t('enter_name'));
+        try {
+            await api('add_player', { name, number, position });
+            document.getElementById('newPlayerName').value = '';
+            document.getElementById('newPlayerNumber').value = '';
+            await loadData();
+            showToast(t('player_added'));
+        } catch (e) { showToast(t('save_error')); }
+    }
+
+    function openEditPlayer(id) {
+        const p = playerById(id);
+        if (!p) return;
+        openSheet(t('edit_player'), `
+            <input type="text" id="editName" class="full" maxlength="100" value="${esc(p.name)}" style="margin-bottom:8px">
+            <div class="input-group">
+                <input type="number" id="editNumber" class="num-input" inputmode="numeric" min="0" max="999" placeholder="${esc(t('number_ph'))}" value="${esc(numText(p))}">
+                <select id="editRole">${roleOptions(p.position)}</select>
+            </div>
+            <button class="btn-primary" onclick="saveEditPlayer(${p.id})">${esc(t('save_changes'))}</button>
+            <button class="btn-ghost mt" onclick="toggleCaptain(${p.id}); closeSheet();">${captainId() === p.id ? '✖ ' : '© '}${esc(t('captain'))}</button>
+            <button class="btn-danger mt" onclick="deletePlayer(${p.id})">${esc(t('delete_player'))}</button>
+        `);
+    }
+
+    async function saveEditPlayer(id) {
+        const name = document.getElementById('editName').value.trim();
+        const number = readNumber(document.getElementById('editNumber').value);
+        const position = document.getElementById('editRole').value;
+        if (!name) return showToast(t('enter_name'));
+        try {
+            await api('edit_player', { id, name, number, position });
+            closeSheet();
+            await loadData();
+            showToast(t('player_updated'));
+        } catch (e) { showToast(t('save_error')); }
+    }
+
+    async function deletePlayer(id) {
+        if (!confirm(t('confirm_delete_player'))) return;
+        try {
+            await api('delete_player', { id });
+            closeSheet();
+            [7, 8].forEach(n => {
+                if (lineups[n] && lineups[n].slots.includes(id)) {
+                    lineups[n].slots = lineups[n].slots.map(x => x === id ? null : x);
+                    persistLineup(n);
+                }
+            });
+            await loadData();
+            showToast(t('player_deleted'));
+        } catch (e) { showToast(t('save_error')); }
+    }
+
+    async function togglePresent(id) {
+        const p = playerById(id);
+        if (!p) return;
+        p.present = !p.present;
+        renderSquad(); renderLineupPage(); renderMatchPage();
+        try {
+            await api('set_present', { id, present: p.present });
+        } catch (e) {
+            p.present = !p.present;
+            renderSquad(); renderLineupPage(); renderMatchPage();
+            showToast(t('save_error'));
+        }
+    }
+
+    async function setAllPresent(present) {
+        const backup = players.map(p => p.present);
+        players.forEach(p => { p.present = present; });
+        renderSquad(); renderLineupPage(); renderMatchPage();
+        try {
+            await api('set_all_present', { present });
+            showToast(t(present ? 'all_present_toast' : 'all_absent_toast'));
+        } catch (e) {
+            players.forEach((p, i) => { p.present = backup[i]; });
+            renderSquad(); renderLineupPage(); renderMatchPage();
+            showToast(t('save_error'));
+        }
+    }
+
+    async function toggleCaptain(id) {
+        const prev = settings.captain_id || '';
+        const next = captainId() === id ? '' : String(id);
+        settings.captain_id = next;
+        renderSquad(); renderLineupPage(); renderMatchPage();
+        try {
+            await api('save_setting', { key: 'captain_id', value: next });
+            const p = playerById(id);
+            showToast(next ? t('captain_set', { name: p ? p.name : '' }) : t('captain_removed'));
+        } catch (e) {
+            settings.captain_id = prev;
+            renderSquad(); renderLineupPage(); renderMatchPage();
+            showToast(t('save_error'));
+        }
+    }
+
+    // =====================================================================
+    // 2. پێکهاتە (تەشکیلە)
+    // =====================================================================
+    function slotLayout(formation) {
+        const rows = formation.split('-').map(Number);
+        const res = [{ x: 50, y: 89, role: 'GK' }];
+        const top = 16, bottom = 69, R = rows.length;
+        rows.forEach((cnt, ri) => {
+            const y = R === 1 ? (top + bottom) / 2 : bottom - ri * (bottom - top) / (R - 1);
+            const role = ri === 0 ? 'DEF' : (ri === R - 1 ? 'FWD' : 'MID');
+            for (let i = 0; i < cnt; i++) res.push({ x: (i + 0.5) * 100 / cnt, y, role });
+        });
+        return res;
+    }
+
+    // mode: 'edit' (پێکهاتە) | 'preview' (ئامادەکرنا یارییێ) | 'live' (یارییا ڕاستەوخۆ)
+    function pitchHTML(formation, slots, mode, capId) {
+        const layout = slotLayout(formation);
+        let html = `<div class="pitch ${mode === 'preview' ? 'compact' : ''}">
+            <div class="pl pl-out"></div><div class="pl pl-half"></div><div class="pl pl-circle"></div>
+            <div class="pl pl-box top"></div><div class="pl pl-box bottom"></div>`;
+        layout.forEach((pos, i) => {
+            const pid = slots[i];
+            const p = pid ? (mode === 'live' ? live.players[pid] : playerById(pid)) : null;
+            const click = mode === 'edit' ? `onLineupSlot(${i})` : mode === 'live' ? `onLiveSlot(${i})` : `switchPage('lineup')`;
+            const style = `left:${pos.x}%; top:${pos.y}%`;
+            if (!p) {
+                html += `<button class="slot empty r-${pos.role} ${benchPick && mode === 'edit' ? 'target' : ''}" style="${style}" onclick="${click}">
+                    <span class="shirt">+</span><span class="slot-name">${esc(roleLabel(pos.role))}</span></button>`;
+                return;
+            }
+            const absent = mode !== 'live' && !p.present;
+            const goals = mode === 'live' ? (p.goals || 0) : 0;
+            html += `<button class="slot r-${pos.role} ${absent ? 'absent' : ''} ${benchPick && mode === 'edit' ? 'target' : ''}" style="${style}" onclick="${click}">
+                <span class="shirt">${esc(shirtText(p))}
+                    ${capId === p.id ? capMark() : ''}
+                    ${goals ? `<span class="goal-badge">⚽${goals > 1 ? goals : ''}</span>` : ''}
+                </span>
+                <span class="slot-name">${esc(p.name)}</span>
+                ${mode === 'live' ? `<span class="slot-min" data-min="${p.id}">${fmtMin(playerSeconds(p))}</span>` : ''}
+            </button>`;
+        });
+        return html + '</div>';
+    }
+
+    function formatSegHTML() {
+        const f = getFormat();
+        return [7, 8].map(n => `<button class="${f === n ? 'on' : ''}" onclick="setFormat(${n})"><b>${n} × ${n}</b><span>${esc(t('n_players', { n }))}</span></button>`).join('');
+    }
+
+    async function setFormat(n) {
+        if (getFormat() === n) return;
+        settings.format = String(n);
+        benchPick = null;
+        renderLineupPage(); renderMatchPage();
+        try { await api('save_setting', { key: 'format', value: String(n) }); } catch (e) { showToast(t('save_error')); }
+    }
+
+    function curLineup() { return lineups[getFormat()] || { formation: FORMATIONS[getFormat()][0], slots: new Array(getFormat()).fill(null) }; }
+
+    function renderLineupPage() {
+        const n = getFormat();
+        if (!lineups[n]) lineups[n] = curLineup();
+        const lu = lineups[n];
+        document.getElementById('formatSegLineup').innerHTML = formatSegHTML();
+        document.getElementById('formationChips').innerHTML = FORMATIONS[n].map(f =>
+            `<button class="chip-btn ${lu.formation === f ? 'on' : ''}" onclick="setFormation('${f}')">${f}</button>`).join('');
+
+        const filled = lu.slots.filter(Boolean).length;
+        document.getElementById('lineupFilled').textContent = `(${filled}/${n})`;
+
+        const bp = benchPick ? playerById(benchPick) : null;
+        document.getElementById('lineupBanner').innerHTML = bp
+            ? `<div class="pick-banner"><span>${esc(t('place_banner', { name: bp.name }))}</span><button class="btn-sm btn-ghost" onclick="pickBench(${bp.id})">✖</button></div>`
+            : `<div class="hint" style="margin-top:0">${esc(t('bench_hint'))}</div>`;
+
+        document.getElementById('lineupPitch').innerHTML = pitchHTML(lu.formation, lu.slots, 'edit', captainId());
+
+        const inLineup = new Set(lu.slots.filter(Boolean));
+        const bench = presentPlayers().filter(p => !inLineup.has(p.id)).sort((a, b) => roleOrder(a.position) - roleOrder(b.position) || byNumberName(a, b));
+        document.getElementById('lineupBenchCount').textContent = `(${bench.length})`;
+        document.getElementById('lineupBench').innerHTML = bench.length ? bench.map(p => `
+            <button class="bench-chip ${benchPick === p.id ? 'sel' : ''}" onclick="pickBench(${p.id})">
+                ${numText(p) ? `<span class="n">${esc(numText(p))}</span>` : ''} ${esc(p.name)} ${captainId() === p.id ? capMark() : ''} ${roleChip(p.position)}
+            </button>`).join('') : `<div class="empty-text" style="width:100%">${esc(t('bench_empty'))}</div>`;
+
+        const absentIn = lu.slots.filter(Boolean).map(playerById).filter(p => p && !p.present);
+        document.getElementById('lineupWarn').innerHTML = absentIn.length
+            ? `<div class="warn-box">${esc(t('absent_in_lineup', { names: absentIn.map(p => p.name).join('، ') }))}</div>` : '';
+    }
+
+    function setFormation(f) {
+        const n = getFormat();
+        lineups[n].formation = f;
+        persistLineup(n);
+        renderLineupPage(); renderMatchPage();
+    }
+
+    function pickBench(id) {
+        benchPick = benchPick === id ? null : id;
+        renderLineupPage();
+    }
+
+    function onLineupSlot(i) {
+        if (benchPick) {
+            placePlayer(benchPick, i);
+            benchPick = null;
+            renderLineupPage();
+            return;
+        }
+        openSlotPicker(i);
+    }
+
+    function openSlotPicker(i) {
+        const n = getFormat();
+        const lu = lineups[n];
+        const layout = slotLayout(lu.formation);
+        const role = layout[i].role;
+        const current = lu.slots[i];
+        const cands = presentPlayers().sort((a, b) => {
+            const ra = a.position === role ? 0 : 1, rb = b.position === role ? 0 : 1;
+            if (ra !== rb) return ra - rb;
+            const ia = lu.slots.includes(a.id) ? 1 : 0, ib = lu.slots.includes(b.id) ? 1 : 0;
+            if (ia !== ib) return ia - ib;
+            return byNumberName(a, b);
+        });
+        let html = '';
+        if (current) html += `<button class="btn-danger" style="margin-bottom:10px" onclick="removeFromSlot(${i})">${esc(t('remove_from_slot'))}</button>`;
+        if (!cands.length) html += `<div class="empty-text">${esc(t('no_present'))}</div>`;
+        html += '<div class="pick-list">' + cands.map(p => {
+            const at = lu.slots.indexOf(p.id);
+            const tag = p.id === current ? t('current') : (at >= 0 ? t('in_slot', { role: roleLabel(layout[at].role) }) : '');
+            return `<button class="pick-row ${p.id === current ? 'cur' : ''}" onclick="placePlayer(${p.id}, ${i}); closeSheet();">
+                <span class="num-badge">${esc(numText(p) || '–')}</span>
+                <span class="pname">${esc(p.name)}</span>
+                ${captainId() === p.id ? capMark() : ''}
+                ${tag ? `<span class="tag">${esc(tag)}</span>` : ''}
+                ${roleChip(p.position)}
+            </button>`;
+        }).join('') + '</div>';
+        openSheet(t('pick_for_slot', { role: roleLabel(role) }), html);
+    }
+
+    function placePlayer(pid, i) {
+        const n = getFormat();
+        const lu = lineups[n];
+        const prev = lu.slots.indexOf(pid);
+        const occupant = lu.slots[i];
+        if (prev === i) return;
+        if (prev >= 0) lu.slots[prev] = occupant;   // گوهۆڕینا جهان د ناڤبەرا دوو یاریزانان دا
+        lu.slots[i] = pid;
+        persistLineup(n);
+        renderLineupPage(); renderMatchPage();
+    }
+
+    function removeFromSlot(i) {
+        const n = getFormat();
+        lineups[n].slots[i] = null;
+        persistLineup(n);
+        closeSheet();
+        renderLineupPage(); renderMatchPage();
+    }
+
+    function autoFillLineup() {
+        const n = getFormat();
+        const lu = lineups[n];
+        const layout = slotLayout(lu.formation);
+        lu.slots = lu.slots.map(id => (id && playerById(id) && playerById(id).present) ? id : null);
+        const used = new Set(lu.slots.filter(Boolean));
+        const pool = presentPlayers().filter(p => !used.has(p.id)).sort(byNumberName);
+        const take = (pred) => { const k = pool.findIndex(pred); return k >= 0 ? pool.splice(k, 1)[0].id : null; };
+        layout.forEach((pos, i) => { if (!lu.slots[i]) lu.slots[i] = take(p => p.position === pos.role); });
+        layout.forEach((pos, i) => {
+            if (lu.slots[i]) return;
+            lu.slots[i] = take(p => !p.position) ?? (pos.role === 'GK' ? take(() => true) : take(p => p.position !== 'GK') ?? take(() => true));
+        });
+        benchPick = null;
+        persistLineup(n);
+        renderLineupPage(); renderMatchPage();
+    }
+
+    function clearLineup() {
+        if (!confirm(t('clear_confirm'))) return;
+        const n = getFormat();
+        lineups[n].slots = new Array(n).fill(null);
+        benchPick = null;
+        persistLineup(n);
+        renderLineupPage(); renderMatchPage();
+    }
+
+    function setLineupStatus(key) {
+        const el = document.getElementById('lineupStatus');
+        el.textContent = key ? t(key) : '';
+        el.style.color = key === 'save_failed' ? 'var(--danger)' : 'var(--primary)';
+    }
+
+    function persistLineup(n) {
+        setLineupStatus('saving');
+        clearTimeout(lineupSaveTimers[n]);
+        lineupSaveTimers[n] = setTimeout(async () => {
+            const value = JSON.stringify(lineups[n]);
+            try {
+                await api('save_setting', { key: 'lineup_' + n, value });
+                settings['lineup_' + n] = value;
+                setLineupStatus('saved');
+            } catch (e) {
+                setLineupStatus('save_failed');
+                showToast(t('save_error'));
+            }
+        }, 500);
+    }
+
+    // =====================================================================
+    // 3. ئامادەکرنا یارییێ
+    // =====================================================================
+    function renderMatchPage() {
+        document.getElementById('liveDot').classList.toggle('on', !!live);
+        document.getElementById('matchSetup').style.display = live ? 'none' : 'block';
+        document.getElementById('matchLive').style.display = live ? 'block' : 'none';
+        if (live) { renderLive(); return; }
+
+        const tn = document.getElementById('setupTeamName');
+        if (!setupTouched && document.activeElement !== tn) tn.value = teamName();
+
+        const opps = [...new Set(matches.map(m => m.details && m.details.opponent_name).filter(Boolean))];
+        document.getElementById('oppNamesList').innerHTML = opps.map(o => `<option value="${esc(o)}"></option>`).join('');
+
+        document.getElementById('formatSegSetup').innerHTML = formatSegHTML();
+
+        const dur = document.getElementById('setupDuration');
+        if (!dur.value) dur.value = parseInt(settings.duration, 10) || 60;
+        renderDurationChips();
+
+        const n = getFormat();
+        const lu = curLineup();
+        const slots = lu.slots.map(id => (id && playerById(id) && playerById(id).present) ? id : null);
+        document.getElementById('setupLineupCount').textContent = `${lu.formation} · ${slots.filter(Boolean).length}/${n}`;
+        document.getElementById('setupPitch').innerHTML = pitchHTML(lu.formation, lu.slots, 'preview', captainId());
+        const absentIn = lu.slots.filter(Boolean).map(playerById).filter(p => p && !p.present);
+        document.getElementById('setupWarn').innerHTML = absentIn.length
+            ? `<div class="warn-box">${esc(t('absent_in_lineup', { names: absentIn.map(p => p.name).join('، ') }))}</div>` : '';
+    }
+
+    function renderDurationChips() {
+        const v = parseInt(document.getElementById('setupDuration').value, 10);
+        document.getElementById('durationChips').innerHTML = DURATIONS.map(d =>
+            `<button class="chip-btn ${v === d ? 'on' : ''}" onclick="setDuration(${d})">${d}</button>`).join('');
+    }
+
+    function setDuration(d) {
+        document.getElementById('setupDuration').value = d;
+        renderDurationChips();
+    }
+
+    function parseOppPlayers(text) {
+        return text.split(/[\n,،]+/).map(s => s.trim()).filter(Boolean).slice(0, 30);
+    }
+
+    function startMatch() {
+        const n = getFormat();
+        const lu = curLineup();
+        const slots = lu.slots.map(id => (id && playerById(id) && playerById(id).present) ? id : null);
+        const filled = slots.filter(Boolean).length;
+        if (filled === 0) return showToast(t('need_one'));
+        if (filled < n && !confirm(t('incomplete_confirm', { f: filled, n }))) return;
+
+        const ourName = document.getElementById('setupTeamName').value.trim() || teamName();
+        const oppName = document.getElementById('setupOppName').value.trim() || t('opp_default');
+        let durMin = parseInt(document.getElementById('setupDuration').value, 10);
+        if (!Number.isFinite(durMin) || durMin < 1) durMin = 60;
+        durMin = Math.min(durMin, 180);
+        const cap = captainId();
+
+        const squad = {};
+        presentPlayers().forEach(p => {
+            const started = slots.includes(p.id);
+            squad[p.id] = {
+                id: p.id, name: p.name, number: p.number, position: p.position || '',
+                started, appeared: started, onSince: started ? 0 : null, played: 0, goals: 0
+            };
+        });
+
+        live = {
+            v: 2,
+            teamName: ourName,
+            oppName,
+            oppPlayers: parseOppPlayers(document.getElementById('setupOppPlayers').value),
+            format: n,
+            formation: lu.formation,
+            duration: durMin * 60,
+            remaining: durMin * 60,
+            isRunning: true,
+            endTime: Date.now() + durMin * 60 * 1000,
+            timeUpShown: false,
+            captainId: cap && squad[cap] ? cap : null,
+            startSlots: slots.slice(),
+            slots: slots.slice(),
+            players: squad,
+            goals: [],
+            subs: [],
+            startedAt: new Date().toISOString()
+        };
+        saveLive();
+
+        // پاراستنا ناڤێ تیمی و دەمی بۆ جارا بهێت
+        if (ourName !== (settings.team_name || '')) {
+            settings.team_name = ourName;
+            api('save_setting', { key: 'team_name', value: ourName }).catch(() => {});
+        }
+        if (String(durMin) !== String(settings.duration || '')) {
+            settings.duration = String(durMin);
+            api('save_setting', { key: 'duration', value: String(durMin) }).catch(() => {});
+        }
+        setupTouched = false;
+        document.getElementById('setupOppName').value = '';
+        document.getElementById('setupOppPlayers').value = '';
+
+        startTimerInterval();
+        requestWakeLock();
+        renderAll();
+        switchPage('match');
+        showToast(t('match_started'));
+    }
+
+    // =====================================================================
+    // 4. یارییا ڕاستەوخۆ: دەمژمێر، گۆل، گوهۆڕین
+    // =====================================================================
+    function saveLive() { if (live) lsSet(LIVE_KEY, JSON.stringify(live)); }
+    function elapsed() { return live ? Math.max(0, live.duration - live.remaining) : 0; }
+    function playerSeconds(lp) { return (lp.played || 0) + (lp.onSince != null ? Math.max(0, elapsed() - lp.onSince) : 0); }
+    function fmtMin(sec) { return Math.floor(sec / 60) + "'"; }
+    function minuteNow() { return Math.max(1, Math.ceil(elapsed() / 60)); }
+    function scoreOf(team) { return live.goals.filter(g => g.team === team).length; }
+
+    function syncRemaining() {
+        if (!live || !live.isRunning || !live.endTime) return;
+        const left = Math.max(0, Math.ceil((live.endTime - Date.now()) / 1000));
+        live.remaining = left;
+        if (left === 0) {
+            live.isRunning = false;
+            live.endTime = null;
+            clearInterval(timerInterval);
+            saveLive();
+            onTimeUp();
+            return;
+        }
+        saveLive();
+    }
+
+    function startTimerInterval() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (!live || !live.isRunning) { clearInterval(timerInterval); return; }
+            syncRemaining();
+            updateTimerDisplay();
+            updateMinuteLabels();
+        }, 1000);
+    }
+
+    function onTimeUp() {
+        vibrate([300, 150, 300]);
+        releaseWakeLock();
+        updateTimerDisplay();
+        updateMinuteLabels();
+        if (!live.timeUpShown) {
+            live.timeUpShown = true;
+            saveLive();
+            openFinishSheet(true);
+        }
+    }
+
+    function updateTimerDisplay() {
+        if (!live) return;
+        const r = live.remaining;
+        const el = document.getElementById('timerDisplay');
+        el.textContent = `${String(Math.floor(r / 60)).padStart(2, '0')}:${String(r % 60).padStart(2, '0')}`;
+        el.classList.toggle('over', r === 0);
+        document.getElementById('elapsedLbl').textContent = t('minute_n', { m: Math.floor(elapsed() / 60) }) + "'";
+        document.getElementById('timerToggleBtn').textContent = live.isRunning ? t('pause') : t('resume');
+    }
+
+    function updateMinuteLabels() {
+        if (!live) return;
+        document.querySelectorAll('[data-min]').forEach(el => {
+            const lp = live.players[el.dataset.min];
+            if (lp) el.textContent = fmtMin(playerSeconds(lp));
+        });
+    }
+
+    function toggleTimer() {
+        if (!live) return;
+        if (live.isRunning) {
+            syncRemaining();
+            if (!live.isRunning) return;
+            clearInterval(timerInterval);
+            live.isRunning = false;
+            live.endTime = null;
+            releaseWakeLock();
+        } else {
+            if (live.remaining <= 0) return addExtraTime(true);
+            live.isRunning = true;
+            live.endTime = Date.now() + live.remaining * 1000;
+            startTimerInterval();
+            requestWakeLock();
+        }
+        saveLive();
+        updateTimerDisplay();
+    }
+
+    function addExtraTime(resume) {
+        if (!live) return;
+        syncRemaining();
+        live.duration += 300;
+        live.remaining += 300;
+        live.timeUpShown = false;
+        if (live.isRunning) {
+            live.endTime += 300000;
+        } else if (resume) {
+            live.isRunning = true;
+            live.endTime = Date.now() + live.remaining * 1000;
+            startTimerInterval();
+            requestWakeLock();
+        }
+        saveLive();
+        closeSheet();
+        updateTimerDisplay();
+        updateMinuteLabels();
+    }
+
+    function renderLive() {
+        if (!live) return;
+        document.getElementById('liveNameA').textContent = live.teamName;
+        document.getElementById('liveNameB').textContent = live.oppName;
+        document.getElementById('liveScoreA').textContent = scoreOf('A');
+        document.getElementById('liveScoreB').textContent = scoreOf('B');
+        document.getElementById('liveFormation').textContent = `${live.format} × ${live.format} · ${live.formation}`;
+        updateTimerDisplay();
+
+        document.getElementById('livePitch').innerHTML = pitchHTML(live.formation, live.slots, 'live', live.captainId);
+
+        const bench = liveBench();
+        document.getElementById('liveBench').innerHTML = bench.length ? bench.map(lp => `
+            <button class="bench-chip" onclick="onLiveBench(${lp.id})">
+                ${numText(lp) ? `<span class="n">${esc(numText(lp))}</span>` : ''} ${esc(lp.name)}
+                ${lp.appeared ? `<span class="m" data-min="${lp.id}">${fmtMin(playerSeconds(lp))}</span>` : ''}
+            </button>`).join('') : `<div class="empty-text" style="width:100%">${esc(t('no_bench'))}</div>`;
+
+        const goalsEl = document.getElementById('liveGoalsList');
+        goalsEl.innerHTML = live.goals.length ? live.goals.map((g, idx) => `
+            <div class="feed-item ${g.team === 'A' ? 'a' : 'b'}">
+                <span><span class="minute">${g.minute}'</span> ⚽ <b>${esc(goalLabel(g))}</b> <span class="muted">(${esc(g.team === 'A' ? live.teamName : live.oppName)})</span></span>
+                <button class="icon-btn del-btn" onclick="undoGoal(${idx})">×</button>
+            </div>`).reverse().join('') : `<div class="empty-text">${esc(t('no_goals'))}</div>`;
+
+        const subsEl = document.getElementById('liveSubsList');
+        subsEl.innerHTML = live.subs.length ? live.subs.map(s => {
+            const pin = live.players[s.in], pout = s.out ? live.players[s.out] : null;
+            return `<div class="feed-item s"><span><span class="minute">${s.minute}'</span> 🟢 ${esc(pin ? pin.name : '?')} ${pout ? `⬅️ 🔴 ${esc(pout.name)}` : ''}</span></div>`;
+        }).reverse().join('') : `<div class="empty-text">${esc(t('no_subs'))}</div>`;
+    }
+
+    function liveBench() {
+        const on = new Set(live.slots.filter(Boolean));
+        return Object.values(live.players).filter(lp => !on.has(lp.id))
+            .sort((a, b) => roleOrder(a.position) - roleOrder(b.position) || byNumberName(a, b));
+    }
+
+    function goalLabel(g) {
+        if (g.og) return t('own_goal');
+        if (g.name) return (g.team === 'B' && g.number != null ? '#' + g.number + ' ' : '') + g.name;
+        if (g.number != null) return '#' + g.number;
+        return t('unknown');
+    }
+
+    // --- گۆل ---
+    function openGoalSheet(team) {
+        if (!live) return;
+        const teamTitle = team === 'A' ? live.teamName : live.oppName;
+        let html = '';
+        if (team === 'A') {
+            const onField = live.slots.filter(Boolean).map(id => live.players[id]);
+            html += '<div class="pick-grid">' + onField.map(lp => `
+                <button class="pick-btn" onclick="recordGoalA(${lp.id})">
+                    <span class="pn">${esc(lp.name)}</span><small>${numText(lp) ? '#' + esc(numText(lp)) + ' · ' : ''}${esc(roleLabel(lp.position))}</small>
+                </button>`).join('') + '</div>';
+            const bench = liveBench().filter(lp => lp.appeared);
+            if (bench.length) {
+                html += `<div class="sheet-section">${esc(t('bench_players'))}</div><div class="pick-grid">` + bench.map(lp => `
+                    <button class="pick-btn" onclick="recordGoalA(${lp.id})"><span class="pn">${esc(lp.name)}</span></button>`).join('') + '</div>';
+            }
+        } else if (live.oppPlayers.length) {
+            html += '<div class="pick-grid">' + live.oppPlayers.map((name, i) => `
+                <button class="pick-btn" onclick="recordGoalB({idx:${i}})"><span class="pn">${esc(name)}</span></button>`).join('') + '</div>';
+        } else {
+            html += `<div class="sheet-section">${esc(t('player_number'))}</div><div class="pick-grid nums">`;
+            for (let i = 1; i <= Math.max(live.format, 8); i++) {
+                html += `<button class="pick-btn" onclick="recordGoalB({number:${i}})"><b style="font-size:1.2rem">${i}</b></button>`;
+            }
+            html += `</div>
+                <div class="input-group">
+                    <input type="number" id="oppCustomNumber" inputmode="numeric" min="0" max="999" placeholder="${esc(t('other_number'))}">
+                    <button class="btn-secondary btn-fit" onclick="recordGoalBCustom()">${esc(t('ok'))}</button>
+                </div>`;
+        }
+        html += `<div class="btn-row">
+            <button class="btn-ghost" onclick="recordOwnGoal('${team}')">${esc(t('own_goal'))}</button>
+            ${team === 'B' ? `<button class="btn-ghost" onclick="recordGoalB({})">${esc(t('unknown'))}</button>` : ''}
+        </div>`;
+        openSheet(t('who_scored', { team: teamTitle }), html);
+    }
+
+    function pushGoal(goal, toastName) {
+        syncRemaining();
+        goal.minute = minuteNow();
+        live.goals.push(goal);
+        saveLive();
+        closeSheet();
+        renderLive();
+        vibrate(150);
+        showToast(t('goal_toast', { name: toastName }));
+    }
+
+    function recordGoalA(pid) {
+        const lp = live.players[pid];
+        if (!lp) return;
+        lp.goals = (lp.goals || 0) + 1;
+        pushGoal({ team: 'A', pid: lp.id, name: lp.name, number: lp.number ?? null }, lp.name);
+    }
+
+    function recordGoalB(o) {
+        const goal = { team: 'B' };
+        if (o.idx != null) goal.name = live.oppPlayers[o.idx];
+        if (o.number != null) goal.number = o.number;
+        pushGoal(goal, goalLabel(goal));
+    }
+
+    function recordGoalBCustom() {
+        const n = readNumber(document.getElementById('oppCustomNumber').value);
+        if (n == null) return;
+        recordGoalB({ number: n });
+    }
+
+    function recordOwnGoal(team) {
+        pushGoal({ team, og: true }, t('own_goal'));
+    }
+
+    function undoGoal(idx) {
+        const g = live.goals[idx];
+        if (!g) return;
+        if (g.team === 'A' && g.pid && live.players[g.pid]) {
+            live.players[g.pid].goals = Math.max(0, (live.players[g.pid].goals || 0) - 1);
+        }
+        live.goals.splice(idx, 1);
+        saveLive();
+        renderLive();
+    }
+
+    // --- گوهۆڕین ---
+    function onLiveSlot(i) {
+        const pid = live.slots[i];
+        if (!pid) return openInPicker(i);
+        const lp = live.players[pid];
+        openSheet(lp.name, `
+            <div class="player-head">
+                <span class="num-badge big-num">${esc(shirtText(lp))}</span>
+                <div>
+                    <div style="font-weight:bold">${esc(lp.name)} ${live.captainId === lp.id ? capMark() : ''}</div>
+                    <div class="muted">${esc(roleLabel(lp.position))} · ⏱️ ${fmtMin(playerSeconds(lp))} · ⚽ ${lp.goals || 0}</div>
+                </div>
+            </div>
+            <button class="btn-primary btn-big" onclick="recordGoalA(${lp.id})">${esc(t('record_goal'))}</button>
+            <button class="btn-secondary mt" onclick="openInPicker(${i})">${esc(t('sub_out'))}</button>
+        `);
+    }
+
+    function openSubFlow() {
+        const html = live.slots.map((pid, i) => ({ pid, i })).filter(x => x.pid).map(({ pid, i }) => {
+            const lp = live.players[pid];
+            return `<button class="pick-row" onclick="openInPicker(${i})">
+                <span class="num-badge">${esc(shirtText(lp))}</span><span class="pname">${esc(lp.name)}</span>
+                <span class="tag" style="direction:ltr">${fmtMin(playerSeconds(lp))}</span>${roleChip(lp.position)}
+            </button>`;
+        }).join('');
+        const layout = slotLayout(live.formation);
+        const empties = live.slots.map((pid, i) => ({ pid, i })).filter(x => !x.pid).map(({ i }) => `
+            <button class="pick-row" onclick="openInPicker(${i})"><span class="num-badge">+</span><span class="pname">${esc(t('empty_slot_n', { role: roleLabel(layout[i].role) }))}</span></button>`).join('');
+        openSheet(t('who_out'), (html || empties) ? `<div class="pick-list">${html}${empties}</div>` : `<div class="empty-text">${esc(t('no_field'))}</div>`);
+    }
+
+    function openInPicker(slotIdx) {
+        const bench = liveBench();
+        const outPid = live.slots[slotIdx];
+        const layout = slotLayout(live.formation);
+        const title = outPid ? t('who_in', { name: live.players[outPid].name }) : t('empty_slot_n', { role: roleLabel(layout[slotIdx].role) });
+        if (!bench.length) { closeSheet(); return showToast(t('no_bench')); }
+        const role = layout[slotIdx].role;
+        bench.sort((a, b) => (a.position === role ? 0 : 1) - (b.position === role ? 0 : 1));
+        openSheet(title, '<div class="pick-list">' + bench.map(lp => `
+            <button class="pick-row" onclick="doSub(${slotIdx}, ${lp.id})">
+                <span class="num-badge">${esc(shirtText(lp))}</span><span class="pname">${esc(lp.name)}</span>
+                ${lp.appeared ? `<span class="tag" style="direction:ltr">${fmtMin(playerSeconds(lp))}</span>` : ''}${roleChip(lp.position)}
+            </button>`).join('') + '</div>');
+    }
+
+    function onLiveBench(pid) {
+        const lp = live.players[pid];
+        const layout = slotLayout(live.formation);
+        const rows = live.slots.map((id, i) => {
+            if (!id) return `<button class="pick-row" onclick="doSub(${i}, ${pid})"><span class="num-badge">+</span><span class="pname">${esc(t('empty_slot_n', { role: roleLabel(layout[i].role) }))}</span></button>`;
+            const op = live.players[id];
+            return `<button class="pick-row" onclick="doSub(${i}, ${pid})">
+                <span class="num-badge">${esc(shirtText(op))}</span><span class="pname">${esc(op.name)}</span>
+                <span class="tag" style="direction:ltr">${fmtMin(playerSeconds(op))}</span>${roleChip(layout[i].role)}
+            </button>`;
+        }).join('');
+        openSheet(t('who_replace', { name: lp.name }), `<div class="pick-list">${rows}</div>`);
+    }
+
+    function doSub(slotIdx, inPid) {
+        syncRemaining();
+        const e = elapsed();
+        const outPid = live.slots[slotIdx];
+        const pin = live.players[inPid];
+        if (!pin || live.slots.includes(inPid)) return closeSheet();
+        if (e === 0) {
+            // بەری دەستپێکرنێ: تنێ گوهۆڕینا پێکهاتێ
+            if (outPid) { const po = live.players[outPid]; po.started = false; po.appeared = false; po.onSince = null; }
+            pin.started = true; pin.appeared = true; pin.onSince = 0;
+            live.startSlots[slotIdx] = inPid;
+        } else {
+            if (outPid) {
+                const po = live.players[outPid];
+                po.played = (po.played || 0) + Math.max(0, e - (po.onSince || 0));
+                po.onSince = null;
+            }
+            pin.onSince = e;
+            pin.appeared = true;
+            live.subs.push({ minute: minuteNow(), out: outPid || null, in: inPid });
+        }
+        live.slots[slotIdx] = inPid;
+        saveLive();
+        closeSheet();
+        renderLive();
+        showToast(t('sub_toast', { in: pin.name, out: outPid ? live.players[outPid].name : '—' }));
+    }
+
+    // --- بداویهینان و پاراستن ---
+    function resultKey(a, b) { return a > b ? 'win' : (a < b ? 'loss' : 'draw'); }
+
+    function openFinishSheet(timeUp) {
+        if (!live) return;
+        const sa = scoreOf('A'), sb = scoreOf('B');
+        const res = resultKey(sa, sb);
+        const ps = Object.values(live.players).filter(lp => lp.appeared)
+            .sort((a, b) => playerSeconds(b) - playerSeconds(a));
+        const goals = live.goals.map(g => `
+            <div class="feed-item ${g.team === 'A' ? 'a' : 'b'}"><span><span class="minute">${g.minute}'</span> ⚽ ${esc(goalLabel(g))}</span></div>`).join('');
+        openSheet(timeUp ? t('time_up') : t('summary'), `
+            <div class="mc-score" style="margin:6px 0 12px">
+                <span class="tn a">${esc(live.teamName)}</span><span class="sc">${sa}</span><span>-</span><span class="sc">${sb}</span><span class="tn b">${esc(live.oppName)}</span>
+            </div>
+            <div style="text-align:center; margin-bottom:12px"><span class="res-badge res-${res}">${esc(t(res))}</span></div>
+            ${goals ? `<div class="sheet-section">${esc(t('goals_title'))}</div>${goals}` : ''}
+            <div class="sheet-section">${esc(t('minutes_played'))}</div>
+            ${ps.map(lp => `<div class="mini-row"><span class="pname">${esc(lp.name)} ${live.captainId === lp.id ? capMark() : ''}</span>
+                ${lp.goals ? `<span>⚽ ${lp.goals}</span>` : ''}<span class="v">${Math.round(playerSeconds(lp) / 60)}'</span></div>`).join('')}
+            <button class="btn-primary btn-big mt" id="saveMatchBtn" onclick="saveMatch()">${esc(t('save_match'))}</button>
+            ${timeUp ? `<button class="btn-ghost mt" onclick="addExtraTime(true)">${esc(t('extra_time'))}</button>` : ''}
+        `);
+    }
+
+    async function saveMatch() {
+        if (!live) return;
+        const btn = document.getElementById('saveMatchBtn');
+        if (btn) btn.disabled = true;
+        syncRemaining();
+        if (live.isRunning) {
+            clearInterval(timerInterval);
+            live.isRunning = false;
+            live.endTime = null;
+        }
+        const e = elapsed();
+        const teamA = Object.values(live.players).map(lp => ({
+            id: lp.id, name: lp.name, number: lp.number ?? null, position: lp.position || '',
+            captain: live.captainId === lp.id,
+            started: !!lp.started, appeared: !!lp.appeared,
+            minutes: Math.round(playerSeconds(lp) / 60), goals: lp.goals || 0
+        })).sort((a, b) => (b.started - a.started) || (b.appeared - a.appeared) || (b.minutes - a.minutes));
+        const nameOf = id => (id && live.players[id]) ? { id, name: live.players[id].name } : null;
+        const payload = {
+            teamA,
+            teamB: live.oppPlayers,
+            scoreA: scoreOf('A'),
+            scoreB: scoreOf('B'),
+            goals: live.goals,
+            details: {
+                v: 2,
+                team_name: live.teamName,
+                opponent_name: live.oppName,
+                format: live.format,
+                formation: live.formation,
+                duration: Math.round(live.duration / 60),
+                played_seconds: e,
+                captain_id: live.captainId,
+                start_slots: live.startSlots.map(nameOf),
+                subs: live.subs.map(s => ({ minute: s.minute, out: nameOf(s.out), in: nameOf(s.in) })),
+                started_at: live.startedAt
+            }
+        };
+        try {
+            const r = await api('save_match', payload);
+            lsDel(LIVE_KEY);
+            live = null;
+            clearInterval(timerInterval);
+            releaseWakeLock();
+            closeSheet();
+            expandedMatchId = r.id;
+            await loadData();
+            switchPage('history');
+            showToast(t('match_saved'));
+        } catch (err) {
+            saveLive();
+            updateTimerDisplay();
+            if (btn) btn.disabled = false;
+            showToast(t('save_error'));
+        }
+    }
+
+    function cancelLiveMatch() {
+        if (!confirm(t('confirm_cancel'))) return;
+        clearInterval(timerInterval);
+        releaseWakeLock();
+        lsDel(LIVE_KEY);
+        live = null;
+        renderAll();
+    }
+
+    // --- ڕۆشن هێلانا شاشێ دەمێ یارییێ ---
+    async function requestWakeLock() {
+        try {
+            if ('wakeLock' in navigator && !wakeLock) {
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => { wakeLock = null; });
+            }
+        } catch (e) { wakeLock = null; }
+    }
+    function releaseWakeLock() { try { if (wakeLock) wakeLock.release(); } catch (e) {} wakeLock = null; }
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && live) {
+            syncRemaining();
+            if (!live) return;
+            updateTimerDisplay();
+            updateMinuteLabels();
+            if (live.isRunning) { startTimerInterval(); requestWakeLock(); }
+        }
+    });
+
+    // =====================================================================
+    // 5. مێژوو
+    // =====================================================================
+    function isV2(m) { return m.details && m.details.v === 2; }
+    function matchDate(m) { return (m.played_at || '').split(' ')[0]; }
+
+    function renderHistory() {
+        const list = document.getElementById('historyList');
+        if (!matches.length) {
+            list.innerHTML = `<div class="empty-text" style="padding:20px">${esc(t('no_matches'))}</div>`;
+            return;
+        }
+        list.innerHTML = matches.map(m => {
+            const v2 = isV2(m);
+            const nameA = v2 ? m.details.team_name : 'A';
+            const nameB = v2 ? m.details.opponent_name : 'B';
+            const res = v2 ? resultKey(m.score_a, m.score_b) : 'legacy';
+            const open = expandedMatchId === m.id;
+            return `
+            <div class="match-card">
+                <div class="mc-head" onclick="toggleMatch(${m.id})">
+                    <div class="mc-meta">
+                        <span>📅 ${esc(matchDate(m))}${v2 ? ` · ${m.details.format}×${m.details.format}` : ''}</span>
+                        <span class="res-badge res-${res}">${esc(t(res))}</span>
+                    </div>
+                    <div class="mc-score">
+                        <span class="tn a">${esc(nameA)}</span><span class="sc">${m.score_a}</span><span>-</span><span class="sc">${m.score_b}</span><span class="tn b">${esc(nameB)}</span>
+                    </div>
+                </div>
+                ${open ? `<div class="mc-body">${v2 ? matchDetailsV2(m) : matchDetailsLegacy(m)}
+                    <div class="btn-row">
+                        <button class="btn-share btn-sm" style="flex:1" onclick="shareMatch(${m.id})">${esc(t('share'))}</button>
+                        <button class="btn-sm del-btn" onclick="deleteMatch(${m.id})">${esc(t('delete'))}</button>
+                    </div></div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    function toggleMatch(id) {
+        expandedMatchId = expandedMatchId === id ? null : id;
+        renderHistory();
+    }
+
+    function goalsFeed(m, nameA, nameB) {
+        if (!m.goals || !m.goals.length) return '';
+        return `<div class="sheet-section">${esc(t('goals_title'))}</div>` + m.goals.map(g => `
+            <div class="feed-item ${g.team === 'A' ? 'a' : 'b'}">
+                <span><span class="minute">${g.minute}'</span> ⚽ <b>${esc(g.player || goalLabel(g))}</b> <span class="muted">(${esc(g.team === 'A' ? nameA : nameB)})</span></span>
+            </div>`).join('');
+    }
+
+    function matchDetailsV2(m) {
+        const d = m.details;
+        const starters = (m.team_a || []).filter(p => p.started);
+        const subsUsed = (m.team_a || []).filter(p => !p.started && p.appeared);
+        const row = p => `<div class="mini-row">
+            <span class="num-badge" style="min-width:26px;height:26px;font-size:0.72rem">${esc(p.number != null ? p.number : '–')}</span>
+            <span class="pname">${esc(p.name)} ${p.captain ? capMark() : ''}</span>
+            ${p.goals ? `<span>⚽ ${p.goals}</span>` : ''}
+            <span class="v">${p.minutes}'</span>
+        </div>`;
+        let html = goalsFeed(m, d.team_name, d.opponent_name);
+        html += `<div class="sheet-section">${esc(t('starters'))} <span style="direction:ltr; display:inline-block">(${esc(d.formation || '')})</span></div>` + starters.map(row).join('');
+        if (subsUsed.length) html += `<div class="sheet-section">${esc(t('subs_used'))}</div>` + subsUsed.map(row).join('');
+        if (d.subs && d.subs.length) {
+            html += `<div class="sheet-section">${esc(t('subs_title'))}</div>` + d.subs.map(s => `
+                <div class="feed-item s"><span><span class="minute">${s.minute}'</span> 🟢 ${esc(s.in ? s.in.name : '?')} ${s.out ? `⬅️ 🔴 ${esc(s.out.name)}` : ''}</span></div>`).join('');
+        }
+        if (m.team_b && m.team_b.length) {
+            html += `<div class="sheet-section">${esc(d.opponent_name)}</div><div class="muted" style="line-height:1.7">${m.team_b.map(esc).join('، ')}</div>`;
+        }
+        return html;
+    }
+
+    function matchDetailsLegacy(m) {
+        let html = goalsFeed(m, 'A', 'B');
+        html += `<div class="sheet-section">A</div><div class="muted" style="line-height:1.7">${(m.team_a || []).map(p => esc(p.name)).join('، ')}</div>`;
+        html += `<div class="sheet-section">B</div><div class="muted" style="line-height:1.7">${(m.team_b || []).map(p => esc(p.name)).join('، ')}</div>`;
+        return html;
+    }
+
+    async function deleteMatch(id) {
+        if (!confirm(t('confirm_delete_match'))) return;
+        try {
+            await api('delete_match', { id });
+            await loadData();
+            showToast(t('match_deleted'));
+        } catch (e) { showToast(t('save_error')); }
+    }
+
+    function shareMatch(id) {
+        const m = matches.find(x => x.id === id);
+        if (!m) return;
+        const v2 = isV2(m);
+        const d = m.details || {};
+        const nameA = v2 ? d.team_name : 'A';
+        const nameB = v2 ? d.opponent_name : 'B';
+        let text = `⚽ *${t('report_title')}* (${matchDate(m)})\n━━━━━━━━━━━━━━\n`;
+        text += `🏆 *${nameA}* ${m.score_a} - ${m.score_b} *${nameB}*`;
+        if (v2) text += ` (${t(resultKey(m.score_a, m.score_b))})`;
+        text += `\n━━━━━━━━━━━━━━\n`;
+        if (m.goals && m.goals.length) {
+            text += `\n🔥 *${t('goals_title')}:*\n`;
+            m.goals.forEach(g => { text += `• ${g.minute}' ${g.player || goalLabel(g)} (${g.team === 'A' ? nameA : nameB})\n`; });
+        }
+        if (v2) {
+            const starters = (m.team_a || []).filter(p => p.started);
+            const subsUsed = (m.team_a || []).filter(p => !p.started && p.appeared);
+            const fmt = p => `${p.name}${p.captain ? ' (C)' : ''} ${p.minutes}'${p.goals ? ' ⚽' + (p.goals > 1 ? p.goals : '') : ''}`;
+            text += `\n🟢 *${t('starters')} (${d.formation}):*\n` + starters.map(p => '• ' + fmt(p)).join('\n') + '\n';
+            if (subsUsed.length) text += `\n🔄 *${t('subs_used')}:*\n` + subsUsed.map(p => '• ' + fmt(p)).join('\n') + '\n';
+            if (d.subs && d.subs.length) {
+                text += `\n🔁 *${t('subs_title')}:*\n` + d.subs.map(s => `• ${s.minute}' ${s.in ? s.in.name : '?'}${s.out ? ' ⬅️ ' + s.out.name : ''}`).join('\n') + '\n';
+            }
+        } else {
+            text += `\n🟢 *A:* ` + (m.team_a || []).map(p => p.name).join('، ');
+            text += `\n🔵 *B:* ` + (m.team_b || []).map(p => p.name).join('، ');
+        }
+        if (navigator.share) {
+            navigator.share({ title: t('report_title'), text }).catch(() => {});
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => showToast(t('report_copied')));
+        }
+    }
+
+    // =====================================================================
+    // 6. ئامار
+    // =====================================================================
+    function computeStats() {
+        const rec = { p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0 };
+        const per = {};
+        const nameToId = {};
+        players.forEach(p => { nameToId[p.name.trim()] = p.id; });
+        const entry = (key, name) => (per[key] = per[key] || { name, apps: 0, minutes: 0, goals: 0 });
+        const keyForId = id => 'id:' + id;
+        const displayName = (id, fallback) => { const p = playerById(id); return p ? p.name : fallback; };
+
+        matches.forEach(m => {
+            if (isV2(m)) {
+                rec.p++;
+                rec.gf += m.score_a; rec.ga += m.score_b;
+                const r = resultKey(m.score_a, m.score_b);
+                if (r === 'win') rec.w++; else if (r === 'draw') rec.d++; else rec.l++;
+                (m.team_a || []).forEach(p => {
+                    if (!p.appeared && !p.minutes) return;
+                    const e = entry(keyForId(p.id), displayName(p.id, p.name));
+                    e.apps++;
+                    e.minutes += p.minutes || 0;
+                });
+                (m.goals || []).forEach(g => {
+                    if (g.team !== 'A' || g.og || !g.pid) return;
+                    entry(keyForId(g.pid), displayName(g.pid, g.name)).goals++;
+                });
+            } else {
+                // یارییێن کەڤن (A - B): هەردوو تیم ژ یاریزانێن مە بوون
+                (m.goals || []).forEach(g => {
+                    if (!g.player) return;
+                    const id = nameToId[String(g.player).trim()];
+                    const key = id ? keyForId(id) : 'n:' + g.player;
+                    entry(key, id ? displayName(id, g.player) : g.player).goals++;
+                });
+            }
+        });
+        return { rec, per: Object.values(per) };
+    }
+
+    function renderStats() {
+        const { rec, per } = computeStats();
+        const box = (v, label, color) => `<div class="rec-box"><b style="${color ? 'color:' + color : ''}">${v}</b><span>${esc(label)}</span></div>`;
+        document.getElementById('recordGrid').innerHTML =
+            box(rec.p, t('played')) + box(rec.w, t('win'), 'var(--primary)') + box(rec.d, t('draw'), 'var(--warning)') +
+            box(rec.l, t('loss'), 'var(--danger)') + box(rec.gf, t('goals_for'), 'var(--primary)') + box(rec.ga, t('goals_against'), 'var(--danger)');
+
+        const scorers = per.filter(p => p.goals > 0).sort((a, b) => b.goals - a.goals || a.name.localeCompare(b.name));
+        document.getElementById('scorersList').innerHTML = scorers.length ? scorers.map((p, i) => `
+            <div class="player-item">
+                <div class="player-info" style="cursor:default">
+                    <span class="num-badge" style="${i === 0 ? 'background:var(--warning);color:#000;border-color:var(--warning)' : ''}">${i + 1}</span>
+                    <b class="pname">${esc(p.name)}</b>
+                </div>
+                <span style="font-weight:bold; color:var(--primary)">⚽ ${p.goals}</span>
+            </div>`).join('') : `<div class="empty-text">${esc(t('no_stats'))}</div>`;
+
+        const table = per.filter(p => p.apps > 0).sort((a, b) => b.apps - a.apps || b.minutes - a.minutes || b.goals - a.goals);
+        document.getElementById('playerStatsTable').innerHTML = table.length ? `
+            <table class="stats-table">
+                <tr><th></th><th>${esc(t('apps'))}</th><th>${esc(t('mins'))}</th><th>${esc(t('goals_word'))}</th></tr>
+                ${table.map(p => `<tr><td>${esc(p.name)}</td><td>${p.apps}</td><td>${p.minutes}</td><td>${p.goals}</td></tr>`).join('')}
+            </table>` : `<div class="empty-text">${esc(t('no_stats'))}</div>`;
+    }
+</script>
+</body>
+</html>
